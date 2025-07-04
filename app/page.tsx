@@ -1,103 +1,151 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import GoogleMap from '@/components/maps/GoogleMap';
+import GuideCardCompact from '@/components/guides/GuideCardCompact';
+import SearchBar from '@/components/ui/SearchBar';
+import { IGuide } from '@/models/Guide';
+import { Menu, X } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [guides, setGuides] = useState<IGuide[]>([]);
+  const [filteredGuides, setFilteredGuides] = useState<IGuide[]>([]);
+  const [selectedGuide, setSelectedGuide] = useState<IGuide | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    fetchGuides();
+  }, []);
+
+  const fetchGuides = async () => {
+    try {
+      const response = await fetch('/api/guides');
+      const data = await response.json();
+      setGuides(data.guides || []);
+      setFilteredGuides(data.guides || []);
+    } catch (error) {
+      console.error('Error fetching guides:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    if (!query.trim()) {
+      setFilteredGuides(guides);
+      return;
+    }
+
+    const filtered = guides.filter(guide => 
+      guide.name.toLowerCase().includes(query.toLowerCase()) ||
+      guide.location.toLowerCase().includes(query.toLowerCase()) ||
+      guide.email.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    setFilteredGuides(filtered);
+  };
+
+  const handleGuideSelect = (guide: IGuide) => {
+    setSelectedGuide(guide);
+  };
+
+  return (
+    <div className="h-screen flex flex-col bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">Explore.pe</h1>
+              <span className="ml-2 text-sm text-gray-600">Guías Turísticos del Perú</span>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-4">
+              <a
+                href="/register"
+                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
+              >
+                Registrar Guía
+              </a>
+            </nav>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 bg-white">
+            <div className="px-4 py-2 space-y-2">
+              <a
+                href="/register"
+                className="w-full text-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors block"
+              >
+                Registrar Guía
+              </a>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Search Bar */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <SearchBar onSearch={handleSearch} />
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-hidden">
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Cargando guías...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="h-full flex">
+            {/* Left side - Guide List */}
+            <div className="w-full lg:w-1/2 h-full overflow-y-auto lg:border-r border-gray-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                {filteredGuides.map((guide) => (
+                  <GuideCardCompact
+                    key={guide._id}
+                    guide={guide}
+                    onSelect={handleGuideSelect}
+                    isSelected={selectedGuide?._id === guide._id}
+                  />
+                ))}
+              </div>
+            </div>
+            
+            {/* Right side - Map (hidden on mobile) */}
+            <div className="hidden lg:block lg:w-1/2 h-full sticky top-0">
+              <GoogleMap 
+                guides={filteredGuides}
+                onMarkerClick={handleGuideSelect}
+                selectedGuide={selectedGuide}
+              />
+            </div>
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Results count */}
+      <div className="bg-white border-t px-4 py-2">
+        <div className="max-w-7xl mx-auto text-sm text-gray-600">
+          {filteredGuides.length} guías encontrados
+        </div>
+      </div>
     </div>
   );
 }
