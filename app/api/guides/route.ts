@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, email, phone, location, youtubeEmbed, instagram, price } = body;
+    const { name, email, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, price } = body;
     
     // Initialize Google Maps client
     const client = new Client({});
@@ -66,11 +66,14 @@ export async function POST(request: Request) {
       name,
       email,
       phone,
+      whatsapp,
       location,
       youtubeEmbed,
       lat,
       lng,
       instagram,
+      facebook,
+      services,
       price,
       category: 'Guía turística'
     });

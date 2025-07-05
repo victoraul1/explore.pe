@@ -5,10 +5,13 @@ export interface IGuide {
   name: string;
   email: string;
   phone: string;
+  whatsapp?: string;
   category: string;
   location: string;
   youtubeEmbed: string;
   instagram?: string;
+  facebook?: string;
+  services?: string;
   lat: number;
   lng: number;
   price?: number;
@@ -17,6 +20,8 @@ export interface IGuide {
     count: number;
   };
   active?: boolean;
+  emailVerified?: boolean;
+  verificationToken?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,10 +30,13 @@ const GuideSchema = new Schema<IGuide>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, required: true },
+  whatsapp: { type: String },
   category: { type: String, required: true, default: 'Guía turística' },
   location: { type: String, required: true },
   youtubeEmbed: { type: String, required: true },
   instagram: { type: String },
+  facebook: { type: String },
+  services: { type: String },
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   price: { type: Number },
@@ -36,7 +44,9 @@ const GuideSchema = new Schema<IGuide>({
     stars: { type: Number, default: 0 },
     count: { type: Number, default: 0 }
   },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  emailVerified: { type: Boolean, default: false },
+  verificationToken: { type: String }
 }, {
   timestamps: true
 });
