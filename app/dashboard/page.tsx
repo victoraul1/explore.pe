@@ -15,7 +15,10 @@ import {
   FileText,
   LogOut,
   Save,
-  AlertCircle
+  AlertCircle,
+  Upload,
+  X,
+  Image as ImageIcon
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -36,6 +39,8 @@ export default function Dashboard() {
     services: '',
     price: '',
   });
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -62,6 +67,7 @@ export default function Dashboard() {
           services: data.guide.services || '',
           price: data.guide.price?.toString() || '',
         });
+        setImages(data.guide.images || []);
       }
     } catch (error) {
       console.error('Error fetching guide data:', error);
@@ -110,6 +116,60 @@ export default function Dashboard() {
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: '/' });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/guides/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setImages(data.images);
+        setMessage('Imagen subida exitosamente');
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        setError(data.error || 'Error al subir imagen');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al subir imagen');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteImage = async (imageUrl: string) => {
+    if (!confirm('¿Está seguro de eliminar esta imagen?')) return;
+
+    try {
+      const response = await fetch(`/api/guides/upload?url=${encodeURIComponent(imageUrl)}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        setImages(data.images);
+        setMessage('Imagen eliminada exitosamente');
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        setError('Error al eliminar imagen');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al eliminar imagen');
+    }
   };
 
   if (loading) {
@@ -328,6 +388,58 @@ export default function Dashboard() {
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Images Gallery */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">
+                <ImageIcon className="inline w-5 h-5 mr-2" />
+                Galería de Imágenes
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Puedes subir hasta 8 imágenes para mostrar tus servicios
+              </p>
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {images.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={image}
+                      alt={`Imagen ${index + 1}`}
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteImage(image)}
+                      className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                
+                {images.length < 8 && (
+                  <label className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
+                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                    <span className="text-sm text-gray-600">
+                      {uploading ? 'Subiendo...' : 'Subir imagen'}
+                    </span>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+              
+              {images.length === 8 && (
+                <p className="text-sm text-amber-600">
+                  Has alcanzado el límite máximo de 8 imágenes
+                </p>
+              )}
             </div>
 
             <div className="flex justify-end pt-6">

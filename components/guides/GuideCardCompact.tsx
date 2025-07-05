@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { IGuide } from '@/models/Guide';
 import { MapPin, Star, DollarSign, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
+import ImageCarousel from '@/components/ImageCarousel';
 
 interface GuideCardCompactProps {
   guide: IGuide;
@@ -99,6 +100,13 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
       {/* Expanded content */}
       {expanded && (
         <div className="px-3 pb-3 border-t pt-3 space-y-3">
+          {/* Images Carousel */}
+          {guide.images && guide.images.length > 0 && (
+            <div className="-mx-3 mb-3">
+              <ImageCarousel images={guide.images} />
+            </div>
+          )}
+
           {/* Services */}
           {guide.services && (
             <div>

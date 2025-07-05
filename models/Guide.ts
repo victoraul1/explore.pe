@@ -13,6 +13,7 @@ export interface IGuide {
   instagram?: string;
   facebook?: string;
   services?: string;
+  images?: string[];
   lat: number;
   lng: number;
   price?: number;
@@ -41,6 +42,7 @@ const GuideSchema = new Schema<IGuide>({
   instagram: { type: String },
   facebook: { type: String },
   services: { type: String },
+  images: [{ type: String }],
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   price: { type: Number },
