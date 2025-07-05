@@ -259,7 +259,7 @@ export default function RegisterGuide() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                      Precio por día (USD)
+                      Precio por hora (S/)
                     </label>
                     <input
                       type="number"
@@ -270,7 +270,7 @@ export default function RegisterGuide() {
                       min="0"
                       step="0.01"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="25"
+                      placeholder="30"
                     />
                   </div>
                 </div>

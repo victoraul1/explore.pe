@@ -67,8 +67,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
           <div className="flex items-center justify-between mb-2">
             {guide.price && (
               <div className="flex items-center gap-1">
-                <DollarSign className="w-3 h-3 text-green-600" />
-                <span className="text-sm font-semibold text-green-600">${guide.price}/día</span>
+                <span className="text-sm font-semibold text-green-600">S/ {guide.price}/hora</span>
               </div>
             )}
             

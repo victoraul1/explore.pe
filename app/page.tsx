@@ -158,6 +158,24 @@ export default function Home() {
           {filteredGuides.length} guías encontrados
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+          <p>
+            Developed by{' '}
+            <a 
+              href="https://www.vrgmarketsolutions.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 underline"
+            >
+              VRG Market Solutions
+            </a>
+            {' '}| All rights reserved © 2025
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

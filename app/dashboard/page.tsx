@@ -335,7 +335,7 @@ export default function Dashboard() {
                   <div>
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
                       <DollarSign className="inline w-4 h-4 mr-1" />
-                      Precio por día (USD)
+                      Precio por hora (S/)
                     </label>
                     <input
                       type="number"
