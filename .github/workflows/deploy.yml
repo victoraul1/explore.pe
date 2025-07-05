@@ -9,12 +9,34 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Check secrets
+      run: |
+        if [ -z "${{ secrets.EXPLOREPE }}" ]; then
+          echo "EXPLOREPE secret is not set!"
+          exit 1
+        else
+          echo "Host secret is set"
+        fi
+        if [ -z "${{ secrets.EXPLOREPE2 }}" ]; then
+          echo "EXPLOREPE2 secret is not set!"
+          exit 1
+        else
+          echo "Username secret is set"
+        fi
+        if [ -z "${{ secrets.EXPLOREPE3 }}" ]; then
+          echo "EXPLOREPE3 secret is not set!"
+          exit 1
+        else
+          echo "Key secret is set"
+        fi
+        
     - name: Deploy to Digital Ocean Droplet
-      uses: appleboy/ssh-action@v1.0.0
+      uses: appleboy/ssh-action@v0.1.5
       with:
-        host: ${{ secrets.DROPLET_HOST }}
-        username: ${{ secrets.DROPLET_USERNAME }}
-        key: ${{ secrets.DROPLET_SSH_KEY }}
+        host: ${{ secrets.EXPLOREPE }}
+        username: ${{ secrets.EXPLOREPE2 }}
+        key: ${{ secrets.EXPLOREPE3 }}
+        port: 22
         script: |
           cd /var/www/explore.pe
           git pull origin main
