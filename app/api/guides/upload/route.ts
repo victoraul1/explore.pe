@@ -131,7 +131,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Remove image from array
-    guide.images = guide.images?.filter(img => img !== imageUrl) || [];
+    guide.images = guide.images?.filter((img: string) => img !== imageUrl) || [];
     await guide.save();
 
     // Note: We're not deleting the actual file to avoid issues if it's referenced elsewhere
