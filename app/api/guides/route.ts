@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Guide from '@/models/Guide';
 import { Client } from '@googlemaps/google-maps-services-js';
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import { sendVerificationEmail } from '@/lib/email';
 
 export async function GET(request: Request) {
   try {
@@ -32,7 +35,22 @@ export async function POST(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, email, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, price } = body;
+    const { name, email, password, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, price } = body;
+
+    // Check if guide already exists
+    const existingGuide = await Guide.findOne({ email });
+    if (existingGuide) {
+      return NextResponse.json(
+        { error: 'Este email ya está registrado' },
+        { status: 400 }
+      );
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString('hex');
     
     // Initialize Google Maps client
     const client = new Client({});
@@ -65,6 +83,7 @@ export async function POST(request: Request) {
     const guide = await Guide.create({
       name,
       email,
+      password: hashedPassword,
       phone,
       whatsapp,
       location,
@@ -75,8 +94,18 @@ export async function POST(request: Request) {
       facebook,
       services,
       price,
-      category: 'Guía turística'
+      category: 'Guía turística',
+      emailVerified: false,
+      verificationToken
     });
+
+    // Send verification email
+    try {
+      await sendVerificationEmail(email, name, verificationToken);
+    } catch (emailError) {
+      console.error('Error sending verification email:', emailError);
+      // Continue with registration even if email fails
+    }
     
     return NextResponse.json({ guide }, { status: 201 });
   } catch (error) {

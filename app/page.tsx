@@ -64,6 +64,12 @@ export default function Home() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-4">
               <a
+                href="/login"
+                className="text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                Iniciar Sesión
+              </a>
+              <a
                 href="/register"
                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
               >
@@ -85,6 +91,12 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 bg-white">
             <div className="px-4 py-2 space-y-2">
+              <a
+                href="/login"
+                className="w-full text-center text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors block"
+              >
+                Iniciar Sesión
+              </a>
               <a
                 href="/register"
                 className="w-full text-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors block"

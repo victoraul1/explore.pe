@@ -4,6 +4,7 @@ export interface IGuide {
   _id?: string;
   name: string;
   email: string;
+  password?: string;
   phone: string;
   whatsapp?: string;
   category: string;
@@ -22,6 +23,8 @@ export interface IGuide {
   active?: boolean;
   emailVerified?: boolean;
   verificationToken?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -29,6 +32,7 @@ export interface IGuide {
 const GuideSchema = new Schema<IGuide>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  password: { type: String, required: true, select: false },
   phone: { type: String, required: true },
   whatsapp: { type: String },
   category: { type: String, required: true, default: 'Guía turística' },
@@ -46,7 +50,9 @@ const GuideSchema = new Schema<IGuide>({
   },
   active: { type: Boolean, default: true },
   emailVerified: { type: Boolean, default: false },
-  verificationToken: { type: String }
+  verificationToken: { type: String },
+  passwordResetToken: { type: String },
+  passwordResetExpires: { type: Date }
 }, {
   timestamps: true
 });
