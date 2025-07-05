@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Guide from '@/models/Guide';
+import { Client } from '@googlemaps/google-maps-services-js';
 
 export async function GET(request: Request) {
   try {
@@ -31,7 +32,35 @@ export async function POST(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, email, phone, location, youtubeEmbed, lat, lng, instagram, price } = body;
+    const { name, email, phone, location, youtubeEmbed, instagram, price } = body;
+    
+    // Initialize Google Maps client
+    const client = new Client({});
+    
+    let lat = -12.0464; // Default Lima coordinates
+    let lng = -77.0428;
+    
+    try {
+      // Geocode the address to get coordinates
+      const geocodeResponse = await client.geocode({
+        params: {
+          address: location + ', Peru',
+          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+        },
+      });
+      
+      if (geocodeResponse.data.results.length > 0) {
+        const result = geocodeResponse.data.results[0];
+        lat = result.geometry.location.lat;
+        lng = result.geometry.location.lng;
+        console.log(`Geocoded ${location} to coordinates: ${lat}, ${lng}`);
+      } else {
+        console.warn(`Could not geocode address: ${location}`);
+      }
+    } catch (geocodeError) {
+      console.error('Geocoding error:', geocodeError);
+      // Use default coordinates if geocoding fails
+    }
     
     const guide = await Guide.create({
       name,

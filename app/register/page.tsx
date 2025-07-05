@@ -34,18 +34,12 @@ export default function RegisterGuide() {
 
       const youtubeEmbed = `https://www.youtube.com/embed/${youtubeId}`;
 
-      // For now, we'll use mock coordinates. In production, you'd use geocoding API
-      const mockLat = -12.0464 + (Math.random() - 0.5) * 2;
-      const mockLng = -77.0428 + (Math.random() - 0.5) * 2;
-
       const response = await fetch('/api/guides', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           youtubeEmbed,
-          lat: mockLat,
-          lng: mockLng,
           price: formData.price ? parseFloat(formData.price) : undefined,
         }),
       });
