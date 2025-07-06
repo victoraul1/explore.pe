@@ -40,11 +40,29 @@ export async function POST(request: Request) {
     user.passwordResetExpires = new Date(Date.now() + 3600000); // 1 hour
     await user.save();
 
-    // Send email
+    // Generate reset URL
+    const resetUrl = `${process.env.NEXTAUTH_URL || 'https://explore.pe'}/reset-password?token=${resetToken}`;
+    
+    // Log the reset URL for debugging
+    console.log(`Password reset URL for ${email}: ${resetUrl}`);
+
+    // Send email with timeout
     try {
-      await sendPasswordResetEmail(email, user.name, resetToken);
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Email timeout')), 10000); // 10 second timeout
+      });
+
+      // Race between email sending and timeout
+      await Promise.race([
+        sendPasswordResetEmail(email, user.name, resetToken),
+        timeoutPromise
+      ]);
+      console.log('Password reset email sent successfully');
     } catch (emailError) {
       console.error('Error sending password reset email:', emailError);
+      // Store the reset URL in a field for manual retrieval if needed
+      console.log(`Manual reset URL: ${resetUrl}`);
       // Still return success to prevent information disclosure
     }
 
