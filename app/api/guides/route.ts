@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, email, password, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, price, userType, category, locations } = body;
+    const { name, email, password, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, userType, category, locations } = body;
 
     // Check if guide already exists
     const existingGuide = await Guide.findOne({ email });
@@ -99,7 +99,6 @@ export async function POST(request: Request) {
       instagram,
       facebook,
       services,
-      price: userType === 'guide' ? price : undefined,
       category: category || 'Guía turística',
       userType: userType || 'guide',
       emailVerified: false,

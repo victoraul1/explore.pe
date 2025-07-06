@@ -8,7 +8,6 @@ import {
   Mail, 
   Phone, 
   MapPin, 
-  DollarSign, 
   Instagram, 
   Facebook, 
   MessageCircle,
@@ -37,7 +36,6 @@ export default function Dashboard() {
     instagram: '',
     facebook: '',
     services: '',
-    price: '',
   });
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -66,7 +64,6 @@ export default function Dashboard() {
           instagram: data.guide.instagram || '',
           facebook: data.guide.facebook || '',
           services: data.guide.services || '',
-          price: data.guide.price?.toString() || '',
         });
         setImages(data.guide.images || []);
         setUserType(data.guide.userType || 'guide');
@@ -91,7 +88,6 @@ export default function Dashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          price: formData.price ? parseFloat(formData.price) : undefined,
         }),
       });
 
@@ -335,25 +331,6 @@ export default function Dashboard() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Describe los servicios que ofreces..."
                   />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                      <DollarSign className="inline w-4 h-4 mr-1" />
-                      Precio por hora (S/)
-                    </label>
-                    <input
-                      type="number"
-                      id="price"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      min="0"
-                      step="0.01"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    />
-                  </div>
                 </div>
               </div>
             </div>

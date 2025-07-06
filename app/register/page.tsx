@@ -20,7 +20,6 @@ export default function RegisterGuide() {
     instagram: '',
     facebook: '',
     services: '',
-    price: '',
   });
   const [explorerLocations, setExplorerLocations] = useState<string[]>(['']);
 
@@ -64,7 +63,6 @@ export default function RegisterGuide() {
           ...formData,
           youtubeEmbed,
           userType,
-          price: formData.price && userType === 'guide' ? parseFloat(formData.price) : undefined,
           category: userType === 'explorer' ? 'Explorer' : 'Guía turística',
           locations: userType === 'explorer' ? explorerLocations.filter(loc => loc.trim()) : undefined,
         }),
@@ -365,30 +363,6 @@ export default function RegisterGuide() {
                     }
                   />
                 </div>
-
-                {userType === 'guide' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                        Precio por hora (S/)
-                      </label>
-                      <input
-                        type="number"
-                        id="price"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        min="0"
-                        step="0.01"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="30"
-                      />
-                      <p className="mt-1 text-sm text-gray-500">
-                        Puedes incluir detalles de precios en la descripción
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
 

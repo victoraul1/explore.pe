@@ -50,7 +50,7 @@ export async function PUT(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, phone, whatsapp, location, instagram, facebook, services, price } = body;
+    const { name, phone, whatsapp, location, instagram, facebook, services } = body;
     
     const guide = await Guide.findOneAndUpdate(
       { email: session.user.email },
@@ -61,8 +61,7 @@ export async function PUT(request: Request) {
         location,
         instagram,
         facebook,
-        services,
-        price
+        services
       },
       { new: true }
     );
