@@ -18,8 +18,10 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const whatsappNumber = guide.whatsapp || guide.phone;
-    const cleanNumber = whatsappNumber.replace(/\D/g, '');
-    window.open(`https://wa.me/${cleanNumber}`, '_blank');
+    if (whatsappNumber) {
+      const cleanNumber = whatsappNumber.replace(/\D/g, '');
+      window.open(`https://wa.me/${cleanNumber}`, '_blank');
+    }
   };
 
   const handleInstagramClick = (e: React.MouseEvent) => {
@@ -132,10 +134,12 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
           <div className="space-y-2">
             <h4 className="font-semibold text-sm">Contacto:</h4>
             
-            <div className="flex items-center gap-2 text-sm">
-              <Phone className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-700">{guide.phone}</span>
-            </div>
+            {guide.phone && (
+              <div className="flex items-center gap-2 text-sm">
+                <Phone className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-700">{guide.phone}</span>
+              </div>
+            )}
 
             {guide.whatsapp && (
               <button
