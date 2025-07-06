@@ -108,6 +108,12 @@ body {
   display: none;
 }
 
+/* Ensure scrollbar is hidden on all webkit browsers */
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar {
+  display: none;
+}
+
 /* Mobile-specific carousel improvements */
 @media (max-width: 768px) {
   .overflow-x-auto {

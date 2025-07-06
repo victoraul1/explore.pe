@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IGuide } from '@/models/Guide';
-import { MapPin, Star, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
+import { MapPin, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
 import ImageCarousel from '@/components/ImageCarousel';
 import ImageCarouselCompact from '@/components/ImageCarouselCompact';
 

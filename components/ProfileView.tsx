@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { IGuide } from '@/models/Guide';
 import { IReview } from '@/models/Review';
-import { MapPin, Star, Phone, MessageCircle, Instagram, Facebook, Share2, Globe, Camera, UserCircle2 } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Instagram, Facebook, Share2, Globe, Camera, UserCircle2 } from 'lucide-react';
 import ImageCarousel from '@/components/ImageCarousel';
 import RatingForm from '@/components/RatingForm';
 import { useSession } from 'next-auth/react';

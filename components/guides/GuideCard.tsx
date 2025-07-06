@@ -1,7 +1,7 @@
 'use client';
 
 import { IGuide } from '@/models/Guide';
-import { MapPin, Phone, Mail, Star, DollarSign, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, DollarSign, Instagram } from 'lucide-react';
 
 interface GuideCardProps {
   guide: IGuide;
@@ -68,13 +68,7 @@ export default function GuideCard({ guide, onSelect, isSelected }: GuideCardProp
             </div>
           )}
           
-          {guide.rating && (
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-500 fill-current" />
-              <span className="font-medium">{guide.rating.stars}</span>
-              <span className="text-gray-500 text-sm">({guide.rating.count})</span>
-            </div>
-          )}
+          {/* Rating - removed per requirements */}
         </div>
       </div>
     </div>
