@@ -6,8 +6,9 @@ import Guide from '@/models/Guide';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     
@@ -31,7 +32,7 @@ export async function POST(
     
     const { active } = await request.json();
     
-    await Guide.findByIdAndUpdate(params.id, { active });
+    await Guide.findByIdAndUpdate(id, { active });
     
     return NextResponse.json({ success: true });
   } catch (error) {

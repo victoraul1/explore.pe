@@ -6,8 +6,9 @@ import Guide from '@/models/Guide';
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions);
     
@@ -30,7 +31,7 @@ export async function DELETE(
     }
     
     // Don't allow deleting admin accounts
-    const guideToDelete = await Guide.findById(params.id);
+    const guideToDelete = await Guide.findById(id);
     if (!guideToDelete) {
       return NextResponse.json(
         { error: 'Guía no encontrada' },
@@ -45,7 +46,7 @@ export async function DELETE(
       );
     }
     
-    await Guide.findByIdAndDelete(params.id);
+    await Guide.findByIdAndDelete(id);
     
     return NextResponse.json({ success: true });
   } catch (error) {
