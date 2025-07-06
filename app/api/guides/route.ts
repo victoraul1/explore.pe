@@ -18,7 +18,9 @@ export async function GET(request: Request) {
     if (category) query.category = category;
     if (location) query.location = new RegExp(location, 'i');
     
-    const guides = await Guide.find(query).where('active').equals(true);
+    const guides = await Guide.find(query)
+      .where('active').equals(true)
+      .where('role').ne('admin');
     
     return NextResponse.json({ guides });
   } catch (error) {

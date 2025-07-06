@@ -26,8 +26,8 @@ export async function GET() {
       );
     }
     
-    // Get all guides
-    const guides = await Guide.find({}).sort({ createdAt: -1 });
+    // Get all guides except admin users
+    const guides = await Guide.find({ role: { $ne: 'admin' } }).sort({ createdAt: -1 });
     
     return NextResponse.json({ guides });
   } catch (error) {
