@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IGuide } from '@/models/Guide';
 import { MapPin, Star, DollarSign, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
 import ImageCarousel from '@/components/ImageCarousel';
+import ImageCarouselCompact from '@/components/ImageCarouselCompact';
 
 interface GuideCardCompactProps {
   guide: IGuide;
@@ -47,13 +48,13 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
         onClick={() => onSelect(guide)}
       >
         <div className="aspect-video relative">
-          <iframe
-            src={guide.youtubeEmbed}
-            title={`Video de ${guide.name}`}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          {guide.images && guide.images.length > 0 ? (
+            <ImageCarouselCompact images={guide.images} />
+          ) : (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500">Sin imágenes</span>
+            </div>
+          )}
         </div>
         
         <div className="p-3">
@@ -99,10 +100,18 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
       {/* Expanded content */}
       {expanded && (
         <div className="px-3 pb-3 border-t pt-3 space-y-3">
-          {/* Images Carousel */}
-          {guide.images && guide.images.length > 0 && (
+          {/* YouTube Video */}
+          {guide.youtubeEmbed && (
             <div className="-mx-3 mb-3">
-              <ImageCarousel images={guide.images} />
+              <div className="aspect-video relative">
+                <iframe
+                  src={guide.youtubeEmbed}
+                  title={`Video de ${guide.name}`}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
           )}
 
