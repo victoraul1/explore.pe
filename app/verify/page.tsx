@@ -54,6 +54,9 @@ function VerifyEmailContent() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
+        <Link href="/" className="inline-block text-2xl font-bold text-gray-900 hover:text-gray-700 mb-6">
+          Explore.pe
+        </Link>
         {status === 'loading' && (
           <>
             <Loader className="w-16 h-16 text-blue-500 animate-spin mx-auto mb-4" />

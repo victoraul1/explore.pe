@@ -51,13 +51,18 @@ export default function Login() {
       <div className="max-w-md w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
           <div className="mb-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900 mb-4"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              Volver al inicio
-            </Link>
+            <div className="flex items-center justify-between mb-6">
+              <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-gray-700">
+                Explore.pe
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 text-gray-700 hover:text-gray-900"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                Volver
+              </Link>
+            </div>
             
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Iniciar Sesión

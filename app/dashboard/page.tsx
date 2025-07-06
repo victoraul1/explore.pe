@@ -186,7 +186,13 @@ export default function Dashboard() {
       <header className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <h1 className="text-xl font-bold text-gray-900">Mi Perfil de Guía</h1>
+            <div className="flex items-center gap-4">
+              <a href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700">
+                Explore.pe
+              </a>
+              <span className="text-gray-400">|</span>
+              <h1 className="text-lg text-gray-700">Mi Perfil</h1>
+            </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
                 {session?.user?.email}

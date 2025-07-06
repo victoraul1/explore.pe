@@ -160,9 +160,12 @@ export default function AdminDashboard() {
       <header className="bg-gray-900 text-white shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div>
-              <h1 className="text-xl font-bold">Panel de Administración</h1>
-              <p className="text-sm text-gray-300">Explore.pe</p>
+            <div className="flex items-center gap-4">
+              <a href="/" className="text-xl font-bold hover:text-gray-300">
+                Explore.pe
+              </a>
+              <span className="text-gray-500">|</span>
+              <h1 className="text-lg">Panel de Administración</h1>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm">{session?.user?.email}</span>

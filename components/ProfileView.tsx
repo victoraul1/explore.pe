@@ -58,9 +58,14 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="text-gray-700 hover:text-gray-900">
-              ← Volver al mapa
-            </a>
+            <div className="flex items-center gap-4">
+              <a href="/" className="text-2xl font-bold text-gray-900 hover:text-gray-700">
+                Explore.pe
+              </a>
+              <a href="/" className="text-gray-700 hover:text-gray-900">
+                ← Volver al mapa
+              </a>
+            </div>
             <div className="flex items-center gap-2">
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                 guide.userType === 'explorer' 
