@@ -24,6 +24,7 @@ interface Guide {
   active: boolean;
   emailVerified: boolean;
   role: string;
+  userType?: 'guide' | 'explorer';
   createdAt: string;
   images?: string[];
 }
@@ -221,7 +222,10 @@ export default function AdminDashboard() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Guía
+                    Usuario
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Tipo
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Contacto
@@ -258,8 +262,17 @@ export default function AdminDashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          guide.userType === 'explorer'
+                            ? 'bg-purple-100 text-purple-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {guide.userType === 'explorer' ? 'Explorer' : 'Guía'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{guide.email}</div>
-                        <div className="text-sm text-gray-500">{guide.phone}</div>
+                        <div className="text-sm text-gray-500">{guide.phone || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -317,7 +330,7 @@ export default function AdminDashboard() {
                     </tr>
                     {expandedGuide === guide._id && guide.images && guide.images.length > 0 && (
                       <tr>
-                        <td colSpan={6} className="px-6 py-4 bg-gray-50">
+                        <td colSpan={7} className="px-6 py-4 bg-gray-50">
                           <div className="grid grid-cols-4 gap-2">
                             {guide.images.map((image, index) => (
                               <img

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IGuide } from '@/models/Guide';
-import { MapPin, Star, DollarSign, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
+import { MapPin, Star, ChevronDown, ChevronUp, Phone, Mail, MessageCircle, Instagram, Facebook } from 'lucide-react';
 import ImageCarousel from '@/components/ImageCarousel';
 import ImageCarouselCompact from '@/components/ImageCarouselCompact';
 
@@ -66,11 +66,16 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
           </div>
           
           <div className="flex items-center justify-between mb-2">
-            {guide.price && (
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-semibold text-green-600">S/ {guide.price}/hora</span>
-              </div>
-            )}
+            {/* User Type Badge */}
+            <div className="flex items-center gap-1">
+              <span className={`text-sm font-semibold px-2 py-1 rounded ${
+                guide.userType === 'explorer' 
+                  ? 'bg-purple-100 text-purple-700' 
+                  : 'bg-blue-100 text-blue-700'
+              }`}>
+                {guide.userType === 'explorer' ? 'Explorer' : 'Guía'}
+              </span>
+            </div>
             
             {guide.rating && (
               <div className="flex items-center gap-1">

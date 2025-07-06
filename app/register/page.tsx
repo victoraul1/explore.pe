@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MapPin, Upload, Facebook, Instagram, MessageCircle } from 'lucide-react';
+import { ArrowLeft, MapPin, Upload, Facebook, Instagram, MessageCircle, UserCircle2, Camera } from 'lucide-react';
 
 export default function RegisterGuide() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [userType, setUserType] = useState<'guide' | 'explorer'>('guide');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,15 +59,18 @@ export default function RegisterGuide() {
         body: JSON.stringify({
           ...formData,
           youtubeEmbed,
-          price: formData.price ? parseFloat(formData.price) : undefined,
+          userType,
+          price: formData.price && userType === 'guide' ? parseFloat(formData.price) : undefined,
+          category: userType === 'explorer' ? 'Explorer' : 'Guía turística',
         }),
       });
 
       if (response.ok) {
-        alert('¡Registro exitoso! Tu perfil de guía ha sido creado. Revisa tu correo para verificar tu cuenta.');
+        alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'explorer'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
         router.push('/');
       } else {
-        throw new Error('Error al registrar');
+        const error = await response.json();
+        throw new Error(error.error || 'Error al registrar');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -95,7 +99,7 @@ export default function RegisterGuide() {
               <ArrowLeft className="w-5 h-5" />
               Volver al inicio
             </button>
-            <h1 className="text-xl font-bold text-gray-900">Registrar como Guía</h1>
+            <h1 className="text-xl font-bold text-gray-900">Únete a Explore.pe</h1>
           </div>
         </div>
       </header>
@@ -103,12 +107,44 @@ export default function RegisterGuide() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Únete a Explore.pe
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              ¿Cómo quieres unirte a Explore.pe?
             </h2>
-            <p className="text-gray-600">
-              Completa el formulario para registrarte como guía turístico y conectar con viajeros de todo el mundo.
-            </p>
+            
+            {/* User Type Selection */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <button
+                type="button"
+                onClick={() => setUserType('guide')}
+                className={`p-6 rounded-lg border-2 transition-all ${
+                  userType === 'guide' 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <UserCircle2 className="w-12 h-12 mb-3 mx-auto text-blue-600" />
+                <h3 className="font-semibold text-lg mb-2">Soy Guía Turístico</h3>
+                <p className="text-sm text-gray-600">
+                  Ofrece tus servicios profesionales como guía y conecta con turistas
+                </p>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => setUserType('explorer')}
+                className={`p-6 rounded-lg border-2 transition-all ${
+                  userType === 'explorer' 
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <Camera className="w-12 h-12 mb-3 mx-auto text-blue-600" />
+                <h3 className="font-semibold text-lg mb-2">Soy Explorer</h3>
+                <p className="text-sm text-gray-600">
+                  Comparte tus experiencias y aventuras en Perú con otros viajeros
+                </p>
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -118,7 +154,7 @@ export default function RegisterGuide() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Nombre completo *
+                    {userType === 'guide' ? 'Nombre completo' : 'Nombre de usuario'} *
                   </label>
                   <input
                     type="text"
@@ -128,7 +164,7 @@ export default function RegisterGuide() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Juan Pérez"
+                    placeholder={userType === 'guide' ? 'Juan Pérez' : 'ExplorerPeru'}
                   />
                 </div>
 
@@ -182,48 +218,54 @@ export default function RegisterGuide() {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                    Teléfono *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="(+51) 999-999-999"
-                  />
-                </div>
+                {userType === 'guide' && (
+                  <>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Teléfono *
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="(+51) 999-999-999"
+                      />
+                    </div>
 
-                <div>
-                  <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
-                    <MessageCircle className="inline w-4 h-4 mr-1" />
-                    WhatsApp
-                  </label>
-                  <input
-                    type="tel"
-                    id="whatsapp"
-                    name="whatsapp"
-                    value={formData.whatsapp}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="(+51) 999-999-999"
-                  />
-                </div>
+                    <div>
+                      <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MessageCircle className="inline w-4 h-4 mr-1" />
+                        WhatsApp
+                      </label>
+                      <input
+                        type="tel"
+                        id="whatsapp"
+                        name="whatsapp"
+                        value={formData.whatsapp}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="(+51) 999-999-999"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Location and Service */}
+            {/* Location and Service/Experience */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Ubicación y Servicios</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                {userType === 'guide' ? 'Ubicación y Servicios' : 'Ubicación y Experiencias'}
+              </h3>
               <div className="space-y-6">
                 <div>
                   <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
                     <MapPin className="inline w-4 h-4 mr-1" />
-                    Dirección completa *
+                    {userType === 'guide' ? 'Dirección completa' : 'Ciudad/Región'} *
                   </label>
                   <input
                     type="text"
@@ -233,16 +275,19 @@ export default function RegisterGuide() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Av. Ejemplo 123, Distrito, Ciudad, Perú"
+                    placeholder={userType === 'guide' ? 'Av. Ejemplo 123, Distrito, Ciudad, Perú' : 'Cusco, Perú'}
                   />
                   <p className="mt-1 text-sm text-gray-500">
-                    Ingresa tu dirección completa para que los turistas puedan ubicarte en el mapa
+                    {userType === 'guide' 
+                      ? 'Ingresa tu dirección completa para que los turistas puedan ubicarte en el mapa'
+                      : 'Indica la ciudad o región de Perú que exploraste'
+                    }
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">
-                    Servicios de Guía *
+                    {userType === 'guide' ? 'Servicios de Guía' : 'Tu experiencia en Perú'} *
                   </label>
                   <textarea
                     id="services"
@@ -252,28 +297,37 @@ export default function RegisterGuide() {
                     required
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Describe los servicios que ofreces: tours disponibles, idiomas que hablas, especialidades, duración de tours, etc."
+                    placeholder={
+                      userType === 'guide'
+                        ? 'Describe los servicios que ofreces: tours disponibles, idiomas que hablas, especialidades, duración de tours, etc.'
+                        : 'Comparte tu experiencia: lugares visitados, actividades realizadas, consejos para otros viajeros, etc.'
+                    }
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                      Precio por hora (S/)
-                    </label>
-                    <input
-                      type="number"
-                      id="price"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleChange}
-                      min="0"
-                      step="0.01"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="30"
-                    />
+                {userType === 'guide' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
+                        Precio por hora (S/)
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        min="0"
+                        step="0.01"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="30"
+                      />
+                      <p className="mt-1 text-sm text-gray-500">
+                        Puedes incluir detalles de precios en la descripción
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
 
@@ -297,7 +351,10 @@ export default function RegisterGuide() {
                     placeholder="https://www.youtube.com/watch?v=..."
                   />
                   <p className="mt-1 text-sm text-gray-500">
-                    Sube un video a YouTube presentándote como guía turístico
+                    {userType === 'guide'
+                      ? 'Sube un video a YouTube presentándote como guía turístico'
+                      : 'Comparte un video de tu aventura en Perú'
+                    }
                   </p>
                 </div>
 
@@ -337,6 +394,21 @@ export default function RegisterGuide() {
               </div>
             </div>
 
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <p className="text-sm text-blue-800">
+                {userType === 'explorer' && (
+                  <>
+                    <strong>Nota para Explorers:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
+                  </>
+                )}
+                {userType === 'guide' && (
+                  <>
+                    <strong>Nota para Guías:</strong> Después de registrarte, podrás subir hasta 8 fotos de tus servicios y experiencias.
+                  </>
+                )}
+              </p>
+            </div>
+
             <div className="flex items-center justify-between pt-6">
               <p className="text-sm text-gray-500">
                 * Campos obligatorios
@@ -346,7 +418,7 @@ export default function RegisterGuide() {
                 disabled={loading}
                 className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Registrando...' : 'Registrar Guía'}
+                {loading ? 'Registrando...' : `Registrar como ${userType === 'guide' ? 'Guía' : 'Explorer'}`}
               </button>
             </div>
           </form>

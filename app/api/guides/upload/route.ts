@@ -29,9 +29,11 @@ export async function POST(request: NextRequest) {
     }
 
     const currentImageCount = guide.images?.length || 0;
-    if (currentImageCount >= 8) {
+    const maxImages = guide.userType === 'explorer' ? 30 : 8;
+    
+    if (currentImageCount >= maxImages) {
       return NextResponse.json(
-        { error: 'Máximo 8 imágenes permitidas' },
+        { error: `Máximo ${maxImages} imágenes permitidas` },
         { status: 400 }
       );
     }

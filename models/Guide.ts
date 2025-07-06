@@ -5,7 +5,7 @@ export interface IGuide {
   name: string;
   email: string;
   password?: string;
-  phone: string;
+  phone?: string;
   whatsapp?: string;
   category: string;
   location: string;
@@ -27,6 +27,7 @@ export interface IGuide {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   role?: 'guide' | 'admin';
+  userType?: 'guide' | 'explorer';
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -35,7 +36,7 @@ const GuideSchema = new Schema<IGuide>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, select: false },
-  phone: { type: String, required: true },
+  phone: { type: String, required: function() { return this.userType === 'guide'; } },
   whatsapp: { type: String },
   category: { type: String, required: true, default: 'Guía turística' },
   location: { type: String, required: true },
@@ -56,7 +57,8 @@ const GuideSchema = new Schema<IGuide>({
   verificationToken: { type: String },
   passwordResetToken: { type: String },
   passwordResetExpires: { type: Date },
-  role: { type: String, enum: ['guide', 'admin'], default: 'guide' }
+  role: { type: String, enum: ['guide', 'admin'], default: 'guide' },
+  userType: { type: String, enum: ['guide', 'explorer'], default: 'guide' }
 }, {
   timestamps: true
 });

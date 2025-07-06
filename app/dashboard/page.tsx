@@ -41,6 +41,7 @@ export default function Dashboard() {
   });
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [userType, setUserType] = useState<'guide' | 'explorer'>('guide');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -68,6 +69,7 @@ export default function Dashboard() {
           price: data.guide.price?.toString() || '',
         });
         setImages(data.guide.images || []);
+        setUserType(data.guide.userType || 'guide');
       }
     } catch (error) {
       console.error('Error fetching guide data:', error);
@@ -259,36 +261,40 @@ export default function Dashboard() {
                   </p>
                 </div>
 
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                    <Phone className="inline w-4 h-4 mr-1" />
-                    Teléfono
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
+                {userType === 'guide' && (
+                  <>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        <Phone className="inline w-4 h-4 mr-1" />
+                        Teléfono
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
 
-                <div>
-                  <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
-                    <MessageCircle className="inline w-4 h-4 mr-1" />
-                    WhatsApp
-                  </label>
-                  <input
-                    type="tel"
-                    id="whatsapp"
-                    name="whatsapp"
-                    value={formData.whatsapp}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
+                    <div>
+                      <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MessageCircle className="inline w-4 h-4 mr-1" />
+                        WhatsApp
+                      </label>
+                      <input
+                        type="tel"
+                        id="whatsapp"
+                        name="whatsapp"
+                        value={formData.whatsapp}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -397,7 +403,7 @@ export default function Dashboard() {
                 Galería de Imágenes
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Puedes subir hasta 8 imágenes para mostrar tus servicios
+                Puedes subir hasta {userType === 'explorer' ? '30' : '8'} imágenes para mostrar {userType === 'explorer' ? 'tus aventuras' : 'tus servicios'}
               </p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -418,7 +424,7 @@ export default function Dashboard() {
                   </div>
                 ))}
                 
-                {images.length < 8 && (
+                {images.length < (userType === 'explorer' ? 30 : 8) && (
                   <label className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
                     <Upload className="w-8 h-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-600">
@@ -437,7 +443,7 @@ export default function Dashboard() {
               
               {images.length === 8 && (
                 <p className="text-sm text-amber-600">
-                  Has alcanzado el límite máximo de 8 imágenes
+                  Has alcanzado el límite máximo de {userType === 'explorer' ? '30' : '8'} imágenes
                 </p>
               )}
             </div>
