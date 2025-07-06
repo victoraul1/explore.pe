@@ -193,7 +193,9 @@ export default function Dashboard() {
                 Explore.pe
               </a>
               <span className="text-gray-400">|</span>
-              <h1 className="text-lg text-gray-700">Mi Perfil</h1>
+              <h1 className="text-lg text-gray-700">
+                Mi Perfil de {userType === 'guide' ? 'Guía' : 'Turista'}
+              </h1>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
@@ -320,44 +322,85 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Location and Services */}
+            {/* Location and Services/Experience */}
             <div>
-              <h3 className="text-lg font-semibold mb-4">Ubicación y Servicios</h3>
+              <h3 className="text-lg font-semibold mb-4">
+                {userType === 'guide' ? 'Ubicación y Servicios' : 'Mi Experiencia'}
+              </h3>
               <div className="space-y-6">
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-                    <MapPin className="inline w-4 h-4 mr-1" />
-                    Dirección completa
-                  </label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  <p className="mt-1 text-sm text-gray-500">
-                    Nota: Cambiar la dirección no actualizará tu ubicación en el mapa automáticamente
-                  </p>
-                </div>
+                {userType === 'guide' ? (
+                  <>
+                    <div>
+                      <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        Dirección completa
+                      </label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      <p className="mt-1 text-sm text-gray-500">
+                        Nota: Cambiar la dirección no actualizará tu ubicación en el mapa automáticamente
+                      </p>
+                    </div>
 
-                <div>
-                  <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">
-                    <FileText className="inline w-4 h-4 mr-1" />
-                    Servicios de Guía
-                  </label>
-                  <textarea
-                    id="services"
-                    name="services"
-                    value={formData.services}
-                    onChange={handleChange}
-                    rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Describe los servicios que ofreces..."
-                  />
-                </div>
+                    <div>
+                      <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">
+                        <FileText className="inline w-4 h-4 mr-1" />
+                        Servicios de Guía
+                      </label>
+                      <textarea
+                        id="services"
+                        name="services"
+                        value={formData.services}
+                        onChange={handleChange}
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Describe los servicios que ofreces..."
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        Mi ubicación actual
+                      </label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        value={formData.location}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ciudad o región donde estás"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">
+                        <FileText className="inline w-4 h-4 mr-1" />
+                        Mi experiencia en Perú
+                      </label>
+                      <textarea
+                        id="services"
+                        name="services"
+                        value={formData.services}
+                        onChange={handleChange}
+                        rows={4}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Comparte tu experiencia viajando por Perú, lugares favoritos, recomendaciones..."
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
