@@ -28,7 +28,6 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
-    e.preventDefault();
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
