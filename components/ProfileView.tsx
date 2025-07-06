@@ -153,6 +153,15 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                 </div>
               )}
 
+              {/* Certificate Number */}
+              {guide.userType === 'guide' && guide.certificateNumber && (
+                <div className="mb-6 p-3 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <span className="font-semibold">Certificado MINCETUR:</span> {guide.certificateNumber}
+                  </p>
+                </div>
+              )}
+
               {/* Description */}
               <div className="mb-6">
                 <h2 className="text-xl font-semibold mb-3">

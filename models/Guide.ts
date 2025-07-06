@@ -7,6 +7,7 @@ export interface IGuide {
   password?: string;
   phone?: string;
   whatsapp?: string;
+  certificateNumber?: string; // Certification number for guides
   category: string;
   location: string;
   locations?: string[]; // Multiple locations for explorers
@@ -39,6 +40,7 @@ const GuideSchema = new Schema<IGuide>({
   password: { type: String, required: true, select: false },
   phone: { type: String, required: function() { return this.userType === 'guide'; } },
   whatsapp: { type: String },
+  certificateNumber: { type: String },
   category: { type: String, required: true, default: 'Guía turística' },
   location: { type: String, required: true },
   locations: [{ type: String }], // Multiple locations for explorers

@@ -295,6 +295,24 @@ export default function Dashboard() {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
+
+                    <div>
+                      <label htmlFor="certificateNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                        Nro Certificado
+                      </label>
+                      <input
+                        type="text"
+                        id="certificateNumber"
+                        name="certificateNumber"
+                        value={formData.certificateNumber || ''}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Certificado de guía turístico"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Número de certificado otorgado por MINCETUR
+                      </p>
+                    </div>
                   </>
                 )}
               </div>

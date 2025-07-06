@@ -20,6 +20,7 @@ interface Guide {
   name: string;
   email: string;
   phone: string;
+  certificateNumber?: string;
   location: string;
   active: boolean;
   emailVerified: boolean;
@@ -276,6 +277,9 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{guide.email}</div>
                         <div className="text-sm text-gray-500">{guide.phone || 'N/A'}</div>
+                        {guide.userType === 'guide' && guide.certificateNumber && (
+                          <div className="text-xs text-blue-600">Cert: {guide.certificateNumber}</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

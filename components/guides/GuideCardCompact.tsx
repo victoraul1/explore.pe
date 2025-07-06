@@ -90,6 +90,11 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
               }`}>
                 {guide.userType === 'explorer' ? 'Turista' : 'Guía'}
               </span>
+              {guide.userType === 'guide' && guide.certificateNumber && (
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded" title={`Certificado: ${guide.certificateNumber}`}>
+                  ✓ Certificado
+                </span>
+              )}
             </div>
             
             {guide.rating && (
