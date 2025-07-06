@@ -54,32 +54,35 @@ export async function POST(request: Request) {
     // Generate verification token
     const verificationToken = crypto.randomBytes(32).toString('hex');
     
-    // Initialize Google Maps client
-    const client = new Client({});
-    
+    // Initialize coordinates
     let lat = -12.0464; // Default Lima coordinates
     let lng = -77.0428;
     
-    try {
-      // Geocode the address to get coordinates
-      const geocodeResponse = await client.geocode({
-        params: {
-          address: location + ', Peru',
-          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-        },
-      });
+    // Only geocode for guides (they need exact location)
+    if (userType === 'guide') {
+      const client = new Client({});
       
-      if (geocodeResponse.data.results.length > 0) {
-        const result = geocodeResponse.data.results[0];
-        lat = result.geometry.location.lat;
-        lng = result.geometry.location.lng;
-        console.log(`Geocoded ${location} to coordinates: ${lat}, ${lng}`);
-      } else {
-        console.warn(`Could not geocode address: ${location}`);
+      try {
+        // Geocode the address to get coordinates
+        const geocodeResponse = await client.geocode({
+          params: {
+            address: location + ', Peru',
+            key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+          },
+        });
+        
+        if (geocodeResponse.data.results.length > 0) {
+          const result = geocodeResponse.data.results[0];
+          lat = result.geometry.location.lat;
+          lng = result.geometry.location.lng;
+          console.log(`Geocoded ${location} to coordinates: ${lat}, ${lng}`);
+        } else {
+          console.warn(`Could not geocode address: ${location}`);
+        }
+      } catch (geocodeError) {
+        console.error('Geocoding error:', geocodeError);
+        // Use default coordinates if geocoding fails
       }
-    } catch (geocodeError) {
-      console.error('Geocoding error:', geocodeError);
-      // Use default coordinates if geocoding fails
     }
     
     const guide = await Guide.create({

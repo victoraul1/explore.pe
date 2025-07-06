@@ -54,6 +54,9 @@ export default function RegisterGuide() {
 
       const youtubeEmbed = `https://www.youtube.com/embed/${youtubeId}`;
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const response = await fetch('/api/guides', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,7 +68,10 @@ export default function RegisterGuide() {
           category: userType === 'explorer' ? 'Explorer' : 'Guía turística',
           locations: userType === 'explorer' ? explorerLocations.filter(loc => loc.trim()) : undefined,
         }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'explorador'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
@@ -74,9 +80,13 @@ export default function RegisterGuide() {
         const error = await response.json();
         throw new Error(error.error || 'Error al registrar');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error:', error);
-      alert('Error al registrar. Por favor, intente nuevamente.');
+      if (error.name === 'AbortError') {
+        alert('La solicitud tardó demasiado. Por favor, intente nuevamente.');
+      } else {
+        alert('Error al registrar. Por favor, intente nuevamente.');
+      }
     } finally {
       setLoading(false);
     }
