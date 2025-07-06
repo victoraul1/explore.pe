@@ -26,6 +26,7 @@ export interface IGuide {
   verificationToken?: string;
   passwordResetToken?: string;
   passwordResetExpires?: Date;
+  role?: 'guide' | 'admin';
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -54,7 +55,8 @@ const GuideSchema = new Schema<IGuide>({
   emailVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
   passwordResetToken: { type: String },
-  passwordResetExpires: { type: Date }
+  passwordResetExpires: { type: Date },
+  role: { type: String, enum: ['guide', 'admin'], default: 'guide' }
 }, {
   timestamps: true
 });
