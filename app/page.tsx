@@ -73,7 +73,7 @@ export default function Home() {
                 href="/register"
                 className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
               >
-                Registrar Guía
+                Registrar
               </a>
             </nav>
 
@@ -101,7 +101,7 @@ export default function Home() {
                 href="/register"
                 className="w-full text-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors block"
               >
-                Registrar Guía
+                Registrar
               </a>
             </div>
           </div>

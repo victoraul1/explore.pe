@@ -66,7 +66,7 @@ export default function RegisterGuide() {
       });
 
       if (response.ok) {
-        alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'explorer'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
+        alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'explorador'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
         router.push('/');
       } else {
         const error = await response.json();
@@ -139,7 +139,7 @@ export default function RegisterGuide() {
                 }`}
               >
                 <Camera className="w-12 h-12 mb-3 mx-auto text-blue-600" />
-                <h3 className="font-semibold text-lg mb-2">Soy Explorer</h3>
+                <h3 className="font-semibold text-lg mb-2">Soy Explorador</h3>
                 <p className="text-sm text-gray-600">
                   Comparte tus experiencias y aventuras en Perú con otros viajeros
                 </p>
@@ -398,7 +398,7 @@ export default function RegisterGuide() {
               <p className="text-sm text-blue-800">
                 {userType === 'explorer' && (
                   <>
-                    <strong>Nota para Explorers:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
+                    <strong>Nota para Exploradores:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
                   </>
                 )}
                 {userType === 'guide' && (
@@ -418,7 +418,7 @@ export default function RegisterGuide() {
                 disabled={loading}
                 className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Registrando...' : `Registrar como ${userType === 'guide' ? 'Guía' : 'Explorer'}`}
+                {loading ? 'Registrando...' : 'Registrar'}
               </button>
             </div>
           </form>

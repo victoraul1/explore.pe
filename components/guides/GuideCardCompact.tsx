@@ -75,7 +75,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
                   ? 'bg-purple-100 text-purple-700' 
                   : 'bg-blue-100 text-blue-700'
               }`}>
-                {guide.userType === 'explorer' ? 'Explorer' : 'Guía'}
+                {guide.userType === 'explorer' ? 'Explorador' : 'Guía'}
               </span>
             </div>
             
