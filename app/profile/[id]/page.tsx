@@ -49,7 +49,7 @@ export default async function ProfilePage({ params }: Props) {
   }
 
   // Fetch reviews if it's a guide
-  let reviews = [];
+  let reviews: any[] = [];
   let averageRating = 0;
   
   if (guide.userType === 'guide') {
