@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const userType = guide.userType === 'explorer' ? 'Explorador' : 'Guía';
+  const userType = guide.userType === 'explorer' ? 'Turista' : 'Guía';
   
   return {
     title: `${guide.name} - ${userType} | Explore.pe`,

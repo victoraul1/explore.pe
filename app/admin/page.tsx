@@ -267,7 +267,7 @@ export default function AdminDashboard() {
                             ? 'bg-purple-100 text-purple-800'
                             : 'bg-blue-100 text-blue-800'
                         }`}>
-                          {guide.userType === 'explorer' ? 'Explorador' : 'Guía'}
+                          {guide.userType === 'explorer' ? 'Turista' : 'Guía'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

@@ -72,7 +72,7 @@ export default function RegisterGuide() {
       clearTimeout(timeoutId);
 
       if (response.ok) {
-        alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'explorador'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
+        alert(`¡Registro exitoso! Tu perfil de ${userType === 'guide' ? 'guía' : 'turista'} ha sido creado. Revisa tu correo para verificar tu cuenta.`);
         router.push('/');
       } else {
         const error = await response.json();
@@ -134,7 +134,7 @@ export default function RegisterGuide() {
               >
                 <UserCircle2 className="w-12 h-12 mb-3 mx-auto text-blue-600" />
                 <h3 className="font-semibold text-lg mb-2">Soy Guía Turístico</h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-700">
                   Ofrece tus servicios profesionales como guía y conecta con turistas
                 </p>
               </button>
@@ -149,8 +149,8 @@ export default function RegisterGuide() {
                 }`}
               >
                 <Camera className="w-12 h-12 mb-3 mx-auto text-blue-600" />
-                <h3 className="font-semibold text-lg mb-2">Soy Explorador</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-semibold text-lg mb-2">Soy Turista</h3>
+                <p className="text-sm text-gray-700">
                   Comparte tus experiencias y aventuras en Perú con otros viajeros
                 </p>
               </button>
@@ -433,7 +433,7 @@ export default function RegisterGuide() {
               <p className="text-sm text-blue-800">
                 {userType === 'explorer' && (
                   <>
-                    <strong>Nota para Exploradores:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
+                    <strong>Nota para Turistas:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
                   </>
                 )}
                 {userType === 'guide' && (

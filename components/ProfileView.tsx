@@ -67,7 +67,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                   ? 'bg-purple-100 text-purple-700' 
                   : 'bg-blue-100 text-blue-700'
               }`}>
-                {guide.userType === 'explorer' ? 'Explorador' : 'Guía'}
+                {guide.userType === 'explorer' ? 'Turista' : 'Guía'}
               </span>
             </div>
           </div>
