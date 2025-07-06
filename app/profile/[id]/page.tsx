@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   
   await dbConnect();
-  const guide = await Guide.findById(id).lean();
+  const guide = await Guide.findById(id).lean() as any;
   
   if (!guide) {
     return {
@@ -42,7 +42,7 @@ export default async function ProfilePage({ params }: Props) {
   
   await dbConnect();
   
-  const guide = await Guide.findById(id).lean();
+  const guide = await Guide.findById(id).lean() as any;
   
   if (!guide) {
     notFound();
