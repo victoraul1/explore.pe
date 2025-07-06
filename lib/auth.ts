@@ -39,6 +39,8 @@ export const authOptions: NextAuthOptions = {
           id: guide._id.toString(),
           email: guide.email,
           name: guide.name,
+          role: guide.role,
+          userType: guide.userType,
         };
       }
     })
@@ -54,12 +56,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
+        token.userType = user.userType;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.userType = token.userType as string;
       }
       return session;
     },

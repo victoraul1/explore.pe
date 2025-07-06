@@ -9,6 +9,7 @@ export interface IGuide {
   whatsapp?: string;
   category: string;
   location: string;
+  locations?: string[]; // Multiple locations for explorers
   youtubeEmbed: string;
   instagram?: string;
   facebook?: string;
@@ -40,6 +41,7 @@ const GuideSchema = new Schema<IGuide>({
   whatsapp: { type: String },
   category: { type: String, required: true, default: 'Guía turística' },
   location: { type: String, required: true },
+  locations: [{ type: String }], // Multiple locations for explorers
   youtubeEmbed: { type: String, required: true },
   instagram: { type: String },
   facebook: { type: String },

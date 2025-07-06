@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, MapPin, Upload, Facebook, Instagram, MessageCircle, UserCircle2, Camera } from 'lucide-react';
+import { ArrowLeft, MapPin, Upload, Facebook, Instagram, MessageCircle, UserCircle2, Camera, Plus, X } from 'lucide-react';
 
 export default function RegisterGuide() {
   const router = useRouter();
@@ -22,6 +22,7 @@ export default function RegisterGuide() {
     services: '',
     price: '',
   });
+  const [explorerLocations, setExplorerLocations] = useState<string[]>(['']);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,6 +63,7 @@ export default function RegisterGuide() {
           userType,
           price: formData.price && userType === 'guide' ? parseFloat(formData.price) : undefined,
           category: userType === 'explorer' ? 'Explorer' : 'Guía turística',
+          locations: userType === 'explorer' ? explorerLocations.filter(loc => loc.trim()) : undefined,
         }),
       });
 
@@ -262,28 +264,77 @@ export default function RegisterGuide() {
                 {userType === 'guide' ? 'Ubicación y Servicios' : 'Ubicación y Experiencias'}
               </h3>
               <div className="space-y-6">
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-                    <MapPin className="inline w-4 h-4 mr-1" />
-                    {userType === 'guide' ? 'Dirección completa' : 'Ciudad/Región'} *
-                  </label>
-                  <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder={userType === 'guide' ? 'Av. Ejemplo 123, Distrito, Ciudad, Perú' : 'Cusco, Perú'}
-                  />
-                  <p className="mt-1 text-sm text-gray-500">
-                    {userType === 'guide' 
-                      ? 'Ingresa tu dirección completa para que los turistas puedan ubicarte en el mapa'
-                      : 'Indica la ciudad o región de Perú que exploraste'
-                    }
-                  </p>
-                </div>
+                {userType === 'guide' ? (
+                  <div>
+                    <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                      <MapPin className="inline w-4 h-4 mr-1" />
+                      Dirección completa *
+                    </label>
+                    <input
+                      type="text"
+                      id="location"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Av. Ejemplo 123, Distrito, Ciudad, Perú"
+                    />
+                    <p className="mt-1 text-sm text-gray-500">
+                      Ingresa tu dirección completa para que los turistas puedan ubicarte en el mapa
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <MapPin className="inline w-4 h-4 mr-1" />
+                      Lugares visitados en Perú *
+                    </label>
+                    <div className="space-y-2">
+                      {explorerLocations.map((location, index) => (
+                        <div key={index} className="flex gap-2">
+                          <input
+                            type="text"
+                            value={location}
+                            onChange={(e) => {
+                              const newLocations = [...explorerLocations];
+                              newLocations[index] = e.target.value;
+                              setExplorerLocations(newLocations);
+                            }}
+                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Ej: Cusco, Machu Picchu"
+                            required={index === 0}
+                          />
+                          {explorerLocations.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newLocations = explorerLocations.filter((_, i) => i !== index);
+                                setExplorerLocations(newLocations);
+                              }}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {explorerLocations.length < 10 && (
+                        <button
+                          type="button"
+                          onClick={() => setExplorerLocations([...explorerLocations, ''])}
+                          className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Agregar otro lugar
+                        </button>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm text-gray-500">
+                      Agrega los lugares que visitaste en Perú (máximo 10)
+                    </p>
+                  </div>
+                )}
 
                 <div>
                   <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">

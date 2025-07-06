@@ -64,7 +64,20 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
           
           <div className="flex items-start gap-1 mb-2">
             <MapPin className="w-3 h-3 text-gray-400 mt-0.5 flex-shrink-0" />
-            <span className="text-sm text-gray-600 line-clamp-1">{guide.location}</span>
+            {guide.userType === 'explorer' && guide.locations && guide.locations.length > 0 ? (
+              <div className="flex flex-wrap gap-1">
+                {guide.locations.slice(0, 3).map((loc, index) => (
+                  <span key={index} className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">
+                    {loc}
+                  </span>
+                ))}
+                {guide.locations.length > 3 && (
+                  <span className="text-xs text-gray-500">+{guide.locations.length - 3}</span>
+                )}
+              </div>
+            ) : (
+              <span className="text-sm text-gray-600 line-clamp-1">{guide.location}</span>
+            )}
           </div>
           
           <div className="flex items-center justify-between mb-2">
@@ -82,8 +95,8 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
             {guide.rating && (
               <div className="flex items-center gap-1">
                 <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                <span className="text-sm font-medium">{guide.rating.stars}</span>
-                <span className="text-gray-500 text-xs">({guide.rating.count})</span>
+                <span className="text-sm font-medium">{guide.rating.stars.toFixed(1)}</span>
+                <span className="text-gray-500 text-xs">({guide.rating.count} reseñas)</span>
               </div>
             )}
           </div>
@@ -91,7 +104,14 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
       </div>
 
       {/* Ver más button */}
-      <div className="px-3 pb-3">
+      <div className="px-3 pb-3 space-y-2">
+        <a
+          href={`/profile/${guide._id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="block w-full text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
+        >
+          Ver perfil completo
+        </a>
         <button
           onClick={(e) => {
             e.stopPropagation();
