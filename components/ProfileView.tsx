@@ -129,29 +129,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                 </div>
               </div>
 
-              {/* Rating */}
-              {guide.userType === 'guide' && (
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`w-5 h-5 ${
-                          star <= Math.round(averageRating)
-                            ? 'text-yellow-500 fill-current'
-                            : 'text-gray-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-gray-600">
-                    {averageRating > 0 
-                      ? `${averageRating.toFixed(1)} (${currentReviews.length} reseñas)`
-                      : 'Sin reseñas aún'
-                    }
-                  </span>
-                </div>
-              )}
+              {/* Rating - removed per requirements */}
 
               {/* Certificate Number */}
               {guide.userType === 'guide' && guide.certificateNumber && (
@@ -163,12 +141,14 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
               )}
 
               {/* Description */}
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold mb-3">
-                  {guide.userType === 'guide' ? 'Servicios' : 'Mi experiencia'}
-                </h2>
-                <p className="text-gray-700 whitespace-pre-wrap">{guide.services}</p>
-              </div>
+              {guide.services && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold mb-3">
+                    {guide.userType === 'guide' ? 'Servicios' : 'Mi experiencia'}
+                  </h2>
+                  <p className="text-gray-700 whitespace-pre-wrap">{guide.services}</p>
+                </div>
+              )}
 
               {/* Contact */}
               {guide.userType === 'guide' && (
@@ -219,65 +199,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
               </div>
             )}
 
-            {/* Reviews Section */}
-            {guide.userType === 'guide' && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Reseñas</h2>
-                  {isExplorer && !hasReviewed && (
-                    <button
-                      onClick={() => setShowRatingForm(true)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                    >
-                      Escribir reseña
-                    </button>
-                  )}
-                </div>
-
-                {showRatingForm && (
-                  <RatingForm
-                    guideId={guide._id!}
-                    guideName={guide.name}
-                    onSubmit={handleReviewSubmit}
-                    onCancel={() => setShowRatingForm(false)}
-                  />
-                )}
-
-                {currentReviews.length > 0 ? (
-                  <div className="space-y-4">
-                    {currentReviews.map((review) => (
-                      <div key={review._id} className="border-b pb-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <span className="font-medium">{review.explorerName}</span>
-                            <div className="flex items-center gap-1 mt-1">
-                              {[1, 2, 3, 4, 5].map((star) => (
-                                <Star
-                                  key={star}
-                                  className={`w-4 h-4 ${
-                                    star <= review.rating
-                                      ? 'text-yellow-500 fill-current'
-                                      : 'text-gray-300'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <span className="text-sm text-gray-500">
-                            {new Date(review.createdAt!).toLocaleDateString('es-PE')}
-                          </span>
-                        </div>
-                        <p className="text-gray-700">{review.comment}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500 text-center py-8">
-                    No hay reseñas aún. {isExplorer && '¡Sé el primero en escribir una!'}
-                  </p>
-                )}
-              </div>
-            )}
+            {/* Reviews Section - removed per requirements */}
           </div>
 
           {/* Sidebar */}

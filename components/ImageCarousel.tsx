@@ -92,14 +92,14 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
 
         <div
           ref={scrollRef}
-          className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing"
+          className="overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing touch-pan-x"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
           onMouseMove={handleMouseMove}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
         >
           <div className="flex gap-4 pb-2">
             {images.map((image, index) => (

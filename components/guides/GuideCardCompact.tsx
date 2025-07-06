@@ -97,13 +97,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
               )}
             </div>
             
-            {guide.rating && (
-              <div className="flex items-center gap-1">
-                <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                <span className="text-sm font-medium">{guide.rating.stars.toFixed(1)}</span>
-                <span className="text-gray-500 text-xs">({guide.rating.count} reseñas)</span>
-              </div>
-            )}
+            {/* Rating - removed per requirements */}
           </div>
         </div>
       </div>
@@ -147,40 +141,44 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
             </div>
           )}
 
-          {/* Services */}
+          {/* Services/Experience */}
           {guide.services && (
             <div>
-              <h4 className="font-semibold text-sm mb-1">Servicios:</h4>
+              <h4 className="font-semibold text-sm mb-1">
+                {guide.userType === 'guide' ? 'Servicios:' : 'Mi experiencia:'}
+              </h4>
               <p className="text-sm text-gray-600 whitespace-pre-wrap">{guide.services}</p>
             </div>
           )}
 
-          {/* Contact information */}
-          <div className="space-y-2">
-            <h4 className="font-semibold text-sm">Contacto:</h4>
-            
-            {guide.phone && (
+          {/* Contact information - only for guides */}
+          {guide.userType === 'guide' && (
+            <div className="space-y-2">
+              <h4 className="font-semibold text-sm">Contacto:</h4>
+              
+              {guide.phone && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  <span className="text-gray-700">{guide.phone}</span>
+                </div>
+              )}
+
+              {guide.whatsapp && (
+                <button
+                  onClick={handleWhatsAppClick}
+                  className="flex items-center gap-2 text-sm text-green-600 hover:text-green-700"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>WhatsApp: {guide.whatsapp}</span>
+                </button>
+              )}
+
               <div className="flex items-center gap-2 text-sm">
-                <Phone className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-700">{guide.phone}</span>
+                <Mail className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-700">{guide.email}</span>
               </div>
-            )}
-
-            {guide.whatsapp && (
-              <button
-                onClick={handleWhatsAppClick}
-                className="flex items-center gap-2 text-sm text-green-600 hover:text-green-700"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp: {guide.whatsapp}</span>
-              </button>
-            )}
-
-            <div className="flex items-center gap-2 text-sm">
-              <Mail className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-700">{guide.email}</span>
             </div>
-          </div>
+          )}
 
           {/* Social media */}
           {(guide.instagram || guide.facebook) && (

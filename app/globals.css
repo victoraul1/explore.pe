@@ -24,3 +24,70 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Ensure dark text colors on mobile devices */
+@media (max-width: 768px) {
+  /* Input fields and textareas */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="url"],
+  textarea,
+  select {
+    color: #111827 !important; /* gray-900 */
+    -webkit-text-fill-color: #111827 !important;
+  }
+  
+  /* Placeholders */
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7280 !important; /* gray-500 */
+    -webkit-text-fill-color: #6b7280 !important;
+  }
+  
+  /* Headings and labels */
+  h1, h2, h3, h4, h5, h6,
+  label,
+  .text-gray-700,
+  .text-gray-800,
+  .text-gray-900 {
+    color: #111827 !important; /* gray-900 */
+  }
+  
+  /* Names and important text */
+  .font-semibold,
+  .font-bold,
+  .font-medium {
+    color: #111827 !important; /* gray-900 */
+  }
+  
+  /* Form buttons */
+  button[type="submit"],
+  .bg-blue-500,
+  .bg-green-500 {
+    color: white !important;
+  }
+  
+  /* Override any light text colors */
+  .text-gray-400,
+  .text-gray-500,
+  .text-gray-600 {
+    color: #374151 !important; /* gray-700 */
+  }
+}
+
+/* Fix carousel touch scrolling on mobile */
+@media (max-width: 768px) {
+  .touch-pan-x {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .touch-none {
+    touch-action: none;
+  }
+  
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}
