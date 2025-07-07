@@ -214,7 +214,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
             {/* Map */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold mb-3">Ubicación</h3>
-              {guide.lat && guide.lng ? (
+              {guide.lat && guide.lng && guide.lat !== 0 && guide.lng !== 0 ? (
                 <div className="aspect-video">
                   <SimpleMap lat={guide.lat} lng={guide.lng} name={guide.name} />
                 </div>
