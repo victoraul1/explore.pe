@@ -266,10 +266,20 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm">
-            Desarrollado por VRG Market Solutions | Todos los derechos reservados © 2025
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm mb-4 md:mb-0">
+              Desarrollado por VRG Market Solutions | Todos los derechos reservados © 2025
+            </p>
+            <div className="flex gap-6">
+              <a href="/terms" className="text-gray-300 hover:text-white text-sm">
+                Términos de Servicio
+              </a>
+              <a href="/privacy" className="text-gray-300 hover:text-white text-sm">
+                Política de Privacidad
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

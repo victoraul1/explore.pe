@@ -452,15 +452,35 @@ export default function RegisterGuide() {
               <p className="text-sm text-blue-800">
                 {userType === 'explorer' && (
                   <>
-                    <strong>Nota para Turistas:</strong> Después de registrarte, podrás subir hasta 30 fotos de tus aventuras en Perú.
+                    <strong>Nota para Turistas:</strong> Después de registrarte, podrás subir hasta 50 fotos de tus aventuras en Perú.
                   </>
                 )}
                 {userType === 'guide' && (
                   <>
-                    <strong>Nota para Guías:</strong> Después de registrarte, podrás subir hasta 8 fotos de tus servicios y experiencias.
+                    <strong>Nota para Guías:</strong> Después de registrarte, podrás subir hasta 20 fotos de tus servicios y experiencias.
                   </>
                 )}
               </p>
+            </div>
+
+            <div className="mt-6">
+              <label className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  required
+                  className="mt-1"
+                />
+                <span className="text-sm text-gray-700">
+                  Al registrarte, aceptas nuestros{' '}
+                  <a href="/terms" target="_blank" className="text-blue-600 hover:underline">
+                    Términos de Servicio
+                  </a>{' '}
+                  y{' '}
+                  <a href="/privacy" target="_blank" className="text-blue-600 hover:underline">
+                    Política de Privacidad
+                  </a>
+                </span>
+              </label>
             </div>
 
             <div className="flex items-center justify-between pt-6">

@@ -160,20 +160,21 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
-          <p>
-            Developed by{' '}
-            <a 
-              href="https://www.vrgmarketsolutions.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-300 underline"
-            >
-              VRG Market Solutions
-            </a>
-            {' '}| All rights reserved © 2025
-          </p>
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-sm mb-4 md:mb-0">
+              Desarrollado por VRG Market Solutions | Todos los derechos reservados © 2025
+            </p>
+            <div className="flex gap-6">
+              <a href="/terms" className="text-gray-300 hover:text-white text-sm">
+                Términos de Servicio
+              </a>
+              <a href="/privacy" className="text-gray-300 hover:text-white text-sm">
+                Política de Privacidad
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
