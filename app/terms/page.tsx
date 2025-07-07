@@ -136,7 +136,7 @@ export default function Terms() {
               <p className="mb-4">
                 Si tiene preguntas sobre estos Términos de Servicio, puede contactarnos en:
                 <br />
-                Email: legal@explore.pe
+                Email: info@explore.pe
               </p>
             </section>
           </div>

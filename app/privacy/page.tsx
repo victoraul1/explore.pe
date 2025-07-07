@@ -106,7 +106,7 @@ export default function Privacy() {
               <p className="mb-4">
                 Si tiene preguntas sobre esta Política de Privacidad, contáctenos en:
                 <br />
-                Email: privacy@explore.pe
+                Email: info@explore.pe
               </p>
             </section>
           </div>
