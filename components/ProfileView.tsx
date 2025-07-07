@@ -6,7 +6,9 @@ import { IReview } from '@/models/Review';
 import { MapPin, Phone, MessageCircle, Instagram, Facebook, Share2, Globe, Camera, UserCircle2 } from 'lucide-react';
 import ImageCarousel from '@/components/ImageCarousel';
 import RatingForm from '@/components/RatingForm';
+import SimpleMap from '@/components/SimpleMap';
 import { useSession } from 'next-auth/react';
+import Script from 'next/script';
 
 interface ProfileViewProps {
   guide: IGuide;
@@ -53,7 +55,12 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        strategy="lazyOnload"
+      />
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -207,12 +214,20 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
             {/* Map */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold mb-3">Ubicación</h3>
-              <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                <Globe className="w-12 h-12 text-gray-400" />
-              </div>
-              <p className="text-sm text-gray-500 mt-2">
-                Mapa próximamente disponible
-              </p>
+              {guide.lat && guide.lng ? (
+                <div className="aspect-video">
+                  <SimpleMap lat={guide.lat} lng={guide.lng} name={guide.name} />
+                </div>
+              ) : (
+                <>
+                  <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                    <Globe className="w-12 h-12 text-gray-400" />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Ubicación no disponible
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Social Media */}
@@ -258,5 +273,6 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
         </div>
       </footer>
     </div>
+    </>
   );
 }
