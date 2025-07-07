@@ -449,7 +449,7 @@ export default function Dashboard() {
                 Galería de Imágenes
               </h3>
               <p className="text-sm text-gray-600 mb-4">
-                Puedes subir hasta {userType === 'explorer' ? '30' : '8'} imágenes para mostrar {userType === 'explorer' ? 'tus aventuras' : 'tus servicios'}
+                Puedes subir hasta {userType === 'explorer' ? '50' : '20'} imágenes para mostrar {userType === 'explorer' ? 'tus aventuras' : 'tus servicios'}
               </p>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -470,7 +470,7 @@ export default function Dashboard() {
                   </div>
                 ))}
                 
-                {images.length < (userType === 'explorer' ? 30 : 8) && (
+                {images.length < (userType === 'explorer' ? 50 : 20) && (
                   <label className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
                     <Upload className="w-8 h-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-600">
@@ -487,9 +487,9 @@ export default function Dashboard() {
                 )}
               </div>
               
-              {images.length === 8 && (
+              {images.length === (userType === 'explorer' ? 50 : 20) && (
                 <p className="text-sm text-amber-600">
-                  Has alcanzado el límite máximo de {userType === 'explorer' ? '30' : '8'} imágenes
+                  Has alcanzado el límite máximo de {userType === 'explorer' ? '50' : '20'} imágenes
                 </p>
               )}
             </div>

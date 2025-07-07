@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const currentImageCount = guide.images?.length || 0;
-    const maxImages = guide.userType === 'explorer' ? 30 : 8;
+    const maxImages = guide.userType === 'explorer' ? 50 : 20;
     
     if (currentImageCount >= maxImages) {
       return NextResponse.json(
