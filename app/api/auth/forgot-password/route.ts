@@ -66,17 +66,10 @@ export async function POST(request: Request) {
       // Still return success to prevent information disclosure
     }
 
-    // For testing purposes, include the reset URL in the response if email fails
-    const response: any = { 
-      message: 'Si existe una cuenta con este correo, recibirás instrucciones para restablecer tu contraseña.' 
-    };
-    
-    // Only include reset URL if email sending failed (for testing)
-    if (process.env.NODE_ENV === 'development' || process.env.SHOW_RESET_URL === 'true') {
-      response.resetUrl = resetUrl;
-    }
-    
-    return NextResponse.json(response, { status: 200 });
+    return NextResponse.json(
+      { message: 'Si existe una cuenta con este correo, recibirás instrucciones para restablecer tu contraseña.' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Forgot password error:', error);
     return NextResponse.json(

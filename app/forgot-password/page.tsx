@@ -27,10 +27,6 @@ export default function ForgotPassword() {
 
       if (response.ok) {
         setMessage('Si existe una cuenta con este correo, recibirás instrucciones para restablecer tu contraseña.');
-        // For testing: also show the reset link if included in response
-        if (data.resetUrl) {
-          setMessage(message => message + `\n\nPara testing: ${data.resetUrl}`);
-        }
         setEmail('');
       } else {
         setError(data.error || 'Error al procesar la solicitud');
