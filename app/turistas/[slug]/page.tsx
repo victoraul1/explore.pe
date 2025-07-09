@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import ProfileView from '@/components/ProfileView';
 import dbConnect from '@/lib/mongodb';
-import Guide from '@/models/Guide';
+import Guide, { IGuide } from '@/models/Guide';
 import Review from '@/models/Review';
 
 interface PageProps {
@@ -20,14 +20,14 @@ export default async function TouristPage({ params }: PageProps) {
     slug, 
     userType: 'explorer',
     active: true 
-  }).lean();
+  }).lean() as IGuide | null;
   
   if (!tourist) {
     notFound();
   }
 
   // Fetch reviews for this tourist (if any)
-  const reviews = await Review.find({ guideId: tourist._id.toString() })
+  const reviews = await Review.find({ guideId: tourist._id?.toString() || '' })
     .sort({ createdAt: -1 })
     .limit(10)
     .lean();

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import ProfileView from '@/components/ProfileView';
 import dbConnect from '@/lib/mongodb';
-import Guide from '@/models/Guide';
+import Guide, { IGuide } from '@/models/Guide';
 import Review from '@/models/Review';
 
 interface PageProps {
@@ -20,14 +20,14 @@ export default async function GuidePage({ params }: PageProps) {
     slug, 
     userType: 'guide',
     active: true 
-  }).lean();
+  }).lean() as IGuide | null;
   
   if (!guide) {
     notFound();
   }
 
   // Fetch reviews for this guide
-  const reviews = await Review.find({ guideId: guide._id.toString() })
+  const reviews = await Review.find({ guideId: guide._id?.toString() || '' })
     .sort({ createdAt: -1 })
     .limit(10)
     .lean();
