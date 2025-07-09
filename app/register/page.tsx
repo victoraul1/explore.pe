@@ -337,7 +337,7 @@ export default function RegisterGuide() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         <MapPin className="inline w-4 h-4 mr-1" />
-                        Lugares visitados en Perú *
+                        Lugares visitados en Perú (opcional)
                       </label>
                     <div className="space-y-2">
                       {explorerLocations.map((location, index) => (
@@ -352,7 +352,6 @@ export default function RegisterGuide() {
                             }}
                             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Ej: Cusco, Machu Picchu"
-                            required={index === 0}
                           />
                           {explorerLocations.length > 1 && (
                             <button
@@ -388,14 +387,14 @@ export default function RegisterGuide() {
 
                 <div>
                   <label htmlFor="services" className="block text-sm font-medium text-gray-700 mb-2">
-                    {userType === 'guide' ? 'Servicios de Guía' : 'Tu experiencia en Perú'} *
+                    {userType === 'guide' ? 'Servicios de Guía *' : 'Tu experiencia en Perú (opcional)'}
                   </label>
                   <textarea
                     id="services"
                     name="services"
                     value={formData.services}
                     onChange={handleChange}
-                    required
+                    required={userType === 'guide'}
                     rows={4}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                     placeholder={
@@ -415,7 +414,7 @@ export default function RegisterGuide() {
                 <div>
                   <label htmlFor="youtubeUrl" className="block text-sm font-medium text-gray-700 mb-2">
                     <Upload className="inline w-4 h-4 mr-1" />
-                    URL de video de YouTube *
+                    URL de video de YouTube (opcional)
                   </label>
                   <input
                     type="url"
@@ -423,14 +422,13 @@ export default function RegisterGuide() {
                     name="youtubeUrl"
                     value={formData.youtubeUrl}
                     onChange={handleChange}
-                    required
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                     placeholder="https://www.youtube.com/watch?v=..."
                   />
                   <p className="mt-1 text-sm text-gray-500">
                     {userType === 'guide'
-                      ? 'Sube un video a YouTube presentándote como guía turístico'
-                      : 'Comparte un video de tu aventura en Perú'
+                      ? 'Sube un video a YouTube presentándote como guía turístico (opcional)'
+                      : 'Comparte un video de tu aventura en Perú (opcional)'
                     }
                   </p>
                 </div>
