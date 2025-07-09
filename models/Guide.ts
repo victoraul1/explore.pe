@@ -50,7 +50,7 @@ const GuideSchema = new Schema<IGuide>({
   country: { type: String }, // Country for tourists
   placesVisited: [{ type: String }], // Places visited in Peru
   slug: { type: String, unique: true, sparse: true }, // URL-friendly slug
-  youtubeEmbed: { type: String, required: true },
+  youtubeEmbed: { type: String },
   instagram: { type: String },
   facebook: { type: String },
   services: { type: String },

@@ -43,17 +43,20 @@ export default function RegisterGuide() {
         return;
       }
 
-      // Extract video ID from YouTube URL
-      const youtubeMatch = formData.youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-      const youtubeId = youtubeMatch ? youtubeMatch[1] : '';
-      
-      if (!youtubeId) {
-        alert('Por favor, ingrese una URL válida de YouTube');
-        setLoading(false);
-        return;
+      // Extract video ID from YouTube URL if provided
+      let youtubeEmbed = '';
+      if (formData.youtubeUrl && formData.youtubeUrl.trim()) {
+        const youtubeMatch = formData.youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+        const youtubeId = youtubeMatch ? youtubeMatch[1] : '';
+        
+        if (!youtubeId) {
+          alert('Por favor, ingrese una URL válida de YouTube');
+          setLoading(false);
+          return;
+        }
+        
+        youtubeEmbed = `https://www.youtube.com/embed/${youtubeId}`;
       }
-
-      const youtubeEmbed = `https://www.youtube.com/embed/${youtubeId}`;
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
