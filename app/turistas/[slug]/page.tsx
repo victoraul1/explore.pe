@@ -27,7 +27,7 @@ export default async function TouristPage({ params }: PageProps) {
   }
 
   // Fetch reviews for this tourist (if any)
-  const reviews = await Review.find({ guideId: tourist._id })
+  const reviews = await Review.find({ guideId: tourist._id.toString() })
     .sort({ createdAt: -1 })
     .limit(10)
     .lean();

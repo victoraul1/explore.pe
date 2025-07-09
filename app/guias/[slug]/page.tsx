@@ -27,7 +27,7 @@ export default async function GuidePage({ params }: PageProps) {
   }
 
   // Fetch reviews for this guide
-  const reviews = await Review.find({ guideId: guide._id })
+  const reviews = await Review.find({ guideId: guide._id.toString() })
     .sort({ createdAt: -1 })
     .limit(10)
     .lean();
