@@ -105,7 +105,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
       {/* Ver más button */}
       <div className="px-3 pb-3 space-y-2">
         <a
-          href={`/profile/${guide._id}`}
+          href={guide.slug ? (guide.userType === 'explorer' ? `/turistas/${guide.slug}` : `/guias/${guide.slug}`) : `/profile/${guide._id}`}
           onClick={(e) => e.stopPropagation()}
           className="block w-full text-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm"
         >

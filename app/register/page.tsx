@@ -17,6 +17,7 @@ export default function RegisterGuide() {
     whatsapp: '',
     certificateNumber: '',
     location: '',
+    country: '',
     youtubeUrl: '',
     instagram: '',
     facebook: '',
@@ -66,6 +67,7 @@ export default function RegisterGuide() {
           userType,
           category: userType === 'explorer' ? 'Explorer' : 'Guía turística',
           locations: userType === 'explorer' ? explorerLocations.filter(loc => loc.trim()) : undefined,
+          country: userType === 'explorer' ? formData.country : undefined,
         }),
         signal: controller.signal,
       });
@@ -312,11 +314,31 @@ export default function RegisterGuide() {
                     </p>
                   </div>
                 ) : (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <MapPin className="inline w-4 h-4 mr-1" />
-                      Lugares visitados en Perú *
-                    </label>
+                  <>
+                    <div>
+                      <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        País de origen *
+                      </label>
+                      <input
+                        type="text"
+                        id="country"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ej: Estados Unidos, Brasil, Argentina"
+                      />
+                      <p className="mt-1 text-sm text-gray-500">
+                        Ingresa tu país de origen
+                      </p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        Lugares visitados en Perú *
+                      </label>
                     <div className="space-y-2">
                       {explorerLocations.map((location, index) => (
                         <div key={index} className="flex gap-2">
@@ -361,6 +383,7 @@ export default function RegisterGuide() {
                       Agrega los lugares que visitaste en Perú (máximo 10)
                     </p>
                   </div>
+                  </>
                 )}
 
                 <div>

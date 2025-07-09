@@ -11,6 +11,9 @@ export interface IGuide {
   category: string;
   location: string;
   locations?: string[]; // Multiple locations for explorers
+  country?: string; // Country for tourists
+  placesVisited?: string[]; // Places visited in Peru for tourists
+  slug?: string; // URL-friendly version of name
   youtubeEmbed: string;
   instagram?: string;
   facebook?: string;
@@ -44,6 +47,9 @@ const GuideSchema = new Schema<IGuide>({
   category: { type: String, required: true, default: 'Guía turística' },
   location: { type: String, required: true },
   locations: [{ type: String }], // Multiple locations for explorers
+  country: { type: String }, // Country for tourists
+  placesVisited: [{ type: String }], // Places visited in Peru
+  slug: { type: String, unique: true, sparse: true }, // URL-friendly slug
   youtubeEmbed: { type: String, required: true },
   instagram: { type: String },
   facebook: { type: String },

@@ -98,6 +98,12 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                   <div className="flex items-center gap-2 mt-2 text-gray-600">
                     <MapPin className="w-4 h-4" />
                     <span>{guide.location}</span>
+                    {guide.userType === 'explorer' && guide.country && (
+                      <>
+                        <span className="text-gray-400">•</span>
+                        <span>{guide.country}</span>
+                      </>
+                    )}
                   </div>
                   {guide.locations && guide.locations.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">

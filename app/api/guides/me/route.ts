@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Guide from '@/models/Guide';
+import { slugify } from '@/lib/slugify';
 
 export async function GET() {
   try {
@@ -50,28 +51,59 @@ export async function PUT(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, phone, whatsapp, location, instagram, facebook, services } = body;
+    const { name, phone, whatsapp, location, instagram, facebook, services, country, placesVisited } = body;
     
-    const guide = await Guide.findOneAndUpdate(
-      { email: session.user.email },
-      {
-        name,
-        phone,
-        whatsapp,
-        location,
-        instagram,
-        facebook,
-        services
-      },
-      { new: true }
-    );
-    
-    if (!guide) {
+    // Get current guide to check if name is changing
+    const currentGuide = await Guide.findOne({ email: session.user.email });
+    if (!currentGuide) {
       return NextResponse.json(
         { error: 'Guía no encontrado' },
         { status: 404 }
       );
     }
+    
+    const updateData: any = {
+      name,
+      phone,
+      whatsapp,
+      location,
+      instagram,
+      facebook,
+      services
+    };
+    
+    // Add tourist-specific fields
+    if (currentGuide.userType === 'explorer') {
+      if (country) updateData.country = country;
+      if (placesVisited) updateData.placesVisited = placesVisited;
+    }
+    
+    // Generate new slug if name changed
+    if (name && name !== currentGuide.name) {
+      let baseSlug = slugify(name);
+      let slug = baseSlug;
+      let counter = 1;
+      
+      // Check if slug already exists and make it unique
+      while (await Guide.findOne({ slug, _id: { $ne: currentGuide._id } })) {
+        slug = `${baseSlug}-${counter}`;
+        counter++;
+      }
+      
+      // For tourists, append country to slug if provided
+      if (currentGuide.userType === 'explorer' && (country || currentGuide.country)) {
+        const countrySlug = slugify(country || currentGuide.country);
+        slug = `${slug}-${countrySlug}`;
+      }
+      
+      updateData.slug = slug;
+    }
+    
+    const guide = await Guide.findOneAndUpdate(
+      { email: session.user.email },
+      updateData,
+      { new: true }
+    );
 
     return NextResponse.json({ guide });
   } catch (error) {

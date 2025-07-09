@@ -34,6 +34,7 @@ export default function Dashboard() {
     whatsapp: '',
     certificateNumber: '',
     location: '',
+    country: '',
     instagram: '',
     facebook: '',
     services: '',
@@ -63,6 +64,7 @@ export default function Dashboard() {
           whatsapp: data.guide.whatsapp || '',
           certificateNumber: data.guide.certificateNumber || '',
           location: data.guide.location || '',
+          country: data.guide.country || '',
           instagram: data.guide.instagram || '',
           facebook: data.guide.facebook || '',
           services: data.guide.services || '',
@@ -381,6 +383,22 @@ export default function Dashboard() {
                         required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Ciudad o región donde estás"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        País de origen
+                      </label>
+                      <input
+                        type="text"
+                        id="country"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ej: Estados Unidos, Brasil, Argentina"
                       />
                     </div>
 

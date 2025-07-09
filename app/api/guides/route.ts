@@ -5,6 +5,7 @@ import { Client } from '@googlemaps/google-maps-services-js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { sendVerificationEmail } from '@/lib/email';
+import { slugify } from '@/lib/slugify';
 
 export async function GET(request: Request) {
   try {
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, email, password, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, userType, category, locations } = body;
+    const { name, email, password, phone, whatsapp, location, youtubeEmbed, instagram, facebook, services, userType, category, locations, country } = body;
 
     // Check if guide already exists
     const existingGuide = await Guide.findOne({ email });
@@ -85,6 +86,23 @@ export async function POST(request: Request) {
       }
     }
     
+    // Generate unique slug
+    let baseSlug = slugify(name);
+    let slug = baseSlug;
+    let counter = 1;
+    
+    // Check if slug already exists and make it unique
+    while (await Guide.findOne({ slug })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+    
+    // For tourists, append country to slug if provided
+    if (userType === 'explorer' && country) {
+      const countrySlug = slugify(country);
+      slug = `${slug}-${countrySlug}`;
+    }
+    
     const guide = await Guide.create({
       name,
       email,
@@ -93,6 +111,8 @@ export async function POST(request: Request) {
       whatsapp: userType === 'guide' ? whatsapp : undefined,
       location: userType === 'explorer' && locations?.length > 0 ? locations[0] : location,
       locations: userType === 'explorer' ? locations : undefined,
+      country: userType === 'explorer' ? country : undefined,
+      slug,
       youtubeEmbed,
       lat,
       lng,
