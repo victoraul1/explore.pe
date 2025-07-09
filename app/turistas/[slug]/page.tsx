@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps) {
     slug, 
     userType: 'explorer',
     active: true 
-  }).lean();
+  }).lean() as IGuide | null;
   
   if (!tourist) {
     return {

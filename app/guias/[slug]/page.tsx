@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: PageProps) {
     slug, 
     userType: 'guide',
     active: true 
-  }).lean();
+  }).lean() as IGuide | null;
   
   if (!guide) {
     return {
