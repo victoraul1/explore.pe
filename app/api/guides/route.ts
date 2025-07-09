@@ -21,7 +21,8 @@ export async function GET(request: Request) {
     
     const guides = await Guide.find(query)
       .where('active').equals(true)
-      .where('role').ne('admin');
+      .where('role').ne('admin')
+      .where('email').ne('info@explore.pe'); // Also exclude by email to be sure
     
     return NextResponse.json({ guides });
   } catch (error) {
