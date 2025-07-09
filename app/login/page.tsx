@@ -30,7 +30,15 @@ export default function Login() {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push('/dashboard');
+        // Check if the user is admin by making an API call
+        const response = await fetch('/api/auth/session');
+        const session = await response.json();
+        
+        if (session?.user?.role === 'admin') {
+          router.push('/admin');
+        } else {
+          router.push('/dashboard');
+        }
       }
     } catch (error) {
       setError('Error al iniciar sesión');
