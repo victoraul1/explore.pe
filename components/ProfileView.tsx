@@ -87,9 +87,9 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className={`grid grid-cols-1 ${guide.userType === 'guide' ? 'lg:grid-cols-3' : ''} gap-8`}>
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className={`${guide.userType === 'guide' ? 'lg:col-span-2' : 'max-w-4xl mx-auto'} space-y-6`}>
             {/* Profile Header */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="flex items-start justify-between mb-4">
@@ -209,58 +209,60 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
             {/* Reviews Section - removed per requirements */}
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Map */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold mb-3">Ubicación</h3>
-              {guide.lat && guide.lng && guide.lat !== 0 && guide.lng !== 0 ? (
-                <div className="aspect-video">
-                  <SimpleMap lat={guide.lat} lng={guide.lng} name={guide.name} />
-                </div>
-              ) : (
-                <>
-                  <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                    <Globe className="w-12 h-12 text-gray-400" />
+          {/* Sidebar - Only for guides */}
+          {guide.userType === 'guide' && (
+            <div className="space-y-6">
+              {/* Map */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-semibold mb-3">Ubicación</h3>
+                {guide.lat && guide.lng && guide.lat !== 0 && guide.lng !== 0 ? (
+                  <div className="aspect-video">
+                    <SimpleMap lat={guide.lat} lng={guide.lng} name={guide.name} />
                   </div>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Ubicación no disponible
-                  </p>
-                </>
+                ) : (
+                  <>
+                    <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                      <Globe className="w-12 h-12 text-gray-400" />
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      Ubicación no disponible
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* Social Media */}
+              {(guide.instagram || guide.facebook) && (
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <h3 className="text-lg font-semibold mb-3">Redes Sociales</h3>
+                  <div className="space-y-2">
+                    {guide.instagram && (
+                      <a
+                        href={`https://instagram.com/${guide.instagram.replace('@', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-pink-600 hover:text-pink-700"
+                      >
+                        <Instagram className="w-4 h-4" />
+                        <span>{guide.instagram}</span>
+                      </a>
+                    )}
+                    {guide.facebook && (
+                      <a
+                        href={guide.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                      >
+                        <Facebook className="w-4 h-4" />
+                        <span>Facebook</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
-
-            {/* Social Media */}
-            {(guide.instagram || guide.facebook) && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold mb-3">Redes Sociales</h3>
-                <div className="space-y-2">
-                  {guide.instagram && (
-                    <a
-                      href={`https://instagram.com/${guide.instagram.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-pink-600 hover:text-pink-700"
-                    >
-                      <Instagram className="w-4 h-4" />
-                      <span>{guide.instagram}</span>
-                    </a>
-                  )}
-                  {guide.facebook && (
-                    <a
-                      href={guide.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
-                    >
-                      <Facebook className="w-4 h-4" />
-                      <span>Facebook</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </main>
 
