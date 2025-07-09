@@ -3,7 +3,7 @@ module.exports = {
     name: 'explore-pe',
     script: 'npm',
     args: 'start',
-    cwd: '/var/www/explore-pe',
+    cwd: '/var/www/explore.pe',
     instances: 1,
     autorestart: true,
     watch: false,
