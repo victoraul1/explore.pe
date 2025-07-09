@@ -422,43 +422,45 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Social Media */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Redes Sociales</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-2">
-                    <Instagram className="inline w-4 h-4 mr-1" />
-                    Instagram
-                  </label>
-                  <input
-                    type="text"
-                    id="instagram"
-                    name="instagram"
-                    value={formData.instagram}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="@tuusuario"
-                  />
-                </div>
+            {/* Social Media - Only for guides */}
+            {userType === 'guide' && (
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Redes Sociales</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="instagram" className="block text-sm font-medium text-gray-700 mb-2">
+                      <Instagram className="inline w-4 h-4 mr-1" />
+                      Instagram
+                    </label>
+                    <input
+                      type="text"
+                      id="instagram"
+                      name="instagram"
+                      value={formData.instagram}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="@tuusuario"
+                    />
+                  </div>
 
-                <div>
-                  <label htmlFor="facebook" className="block text-sm font-medium text-gray-700 mb-2">
-                    <Facebook className="inline w-4 h-4 mr-1" />
-                    Facebook
-                  </label>
-                  <input
-                    type="url"
-                    id="facebook"
-                    name="facebook"
-                    value={formData.facebook}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="https://facebook.com/tupagina"
-                  />
+                  <div>
+                    <label htmlFor="facebook" className="block text-sm font-medium text-gray-700 mb-2">
+                      <Facebook className="inline w-4 h-4 mr-1" />
+                      Facebook
+                    </label>
+                    <input
+                      type="url"
+                      id="facebook"
+                      name="facebook"
+                      value={formData.facebook}
+                      onChange={handleChange}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="https://facebook.com/tupagina"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
             {/* Images Gallery */}
             <div>
