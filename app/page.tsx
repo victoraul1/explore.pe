@@ -13,10 +13,17 @@ export default function Home() {
   const [selectedGuide, setSelectedGuide] = useState<IGuide | null>(null);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showGuides, setShowGuides] = useState(true);
+  const [showTourists, setShowTourists] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchGuides();
   }, []);
+
+  useEffect(() => {
+    applyFilters(searchQuery, showGuides, showTourists);
+  }, [guides]);
 
   const fetchGuides = async () => {
     try {
@@ -32,18 +39,42 @@ export default function Home() {
   };
 
   const handleSearch = (query: string) => {
-    if (!query.trim()) {
-      setFilteredGuides(guides);
-      return;
-    }
+    setSearchQuery(query);
+    applyFilters(query, showGuides, showTourists);
+  };
 
-    const filtered = guides.filter(guide => 
-      guide.name.toLowerCase().includes(query.toLowerCase()) ||
-      guide.location.toLowerCase().includes(query.toLowerCase()) ||
-      guide.email.toLowerCase().includes(query.toLowerCase())
-    );
+  const applyFilters = (query: string, showGuidesFilter: boolean, showTouristsFilter: boolean) => {
+    let filtered = [...guides];
+
+    // Filter by user type
+    filtered = filtered.filter(guide => {
+      if (guide.userType === 'guide' && !showGuidesFilter) return false;
+      if (guide.userType === 'explorer' && !showTouristsFilter) return false;
+      return true;
+    });
+
+    // Filter by search query
+    if (query.trim()) {
+      filtered = filtered.filter(guide => 
+        guide.name.toLowerCase().includes(query.toLowerCase()) ||
+        guide.location.toLowerCase().includes(query.toLowerCase()) ||
+        guide.email.toLowerCase().includes(query.toLowerCase())
+      );
+    }
     
     setFilteredGuides(filtered);
+  };
+
+  const handleToggleGuides = () => {
+    const newShowGuides = !showGuides;
+    setShowGuides(newShowGuides);
+    applyFilters(searchQuery, newShowGuides, showTourists);
+  };
+
+  const handleToggleTourists = () => {
+    const newShowTourists = !showTourists;
+    setShowTourists(newShowTourists);
+    applyFilters(searchQuery, showGuides, newShowTourists);
   };
 
   const handleGuideSelect = (guide: IGuide) => {
@@ -108,10 +139,42 @@ export default function Home() {
         )}
       </header>
 
-      {/* Search Bar */}
+      {/* Search Bar and Filters */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <SearchBar onSearch={handleSearch} />
+          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+            {/* Search Bar - narrower on desktop */}
+            <div className="w-full lg:w-1/2">
+              <SearchBar onSearch={handleSearch} />
+            </div>
+            
+            {/* Filter Checkboxes */}
+            <div className="flex flex-wrap gap-4 lg:gap-6">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showGuides}
+                  onChange={handleToggleGuides}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700">
+                  Mostrar Guías Turísticos
+                </span>
+              </label>
+              
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showTourists}
+                  onChange={handleToggleTourists}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700">
+                  Mostrar Turistas
+                </span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -155,7 +218,7 @@ export default function Home() {
       {/* Results count */}
       <div className="bg-white border-t px-4 py-2">
         <div className="max-w-7xl mx-auto text-sm text-gray-600">
-          {filteredGuides.length} guías encontrados
+          {filteredGuides.length} {filteredGuides.length === 1 ? 'resultado' : 'resultados'} encontrado{filteredGuides.length !== 1 ? 's' : ''}
         </div>
       </div>
 
