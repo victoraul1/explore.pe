@@ -5,7 +5,7 @@ import GoogleMap from '@/components/maps/GoogleMap';
 import GuideCardCompact from '@/components/guides/GuideCardCompact';
 import SearchBar from '@/components/ui/SearchBar';
 import { IGuide } from '@/models/Guide';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Map, List } from 'lucide-react';
 
 export default function Home() {
   const [guides, setGuides] = useState<IGuide[]>([]);
@@ -16,6 +16,7 @@ export default function Home() {
   const [showGuides, setShowGuides] = useState(true);
   const [showTourists, setShowTourists] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 
   useEffect(() => {
     fetchGuides();
@@ -179,7 +180,7 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden relative">
         {loading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
@@ -188,35 +189,84 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="h-full flex">
-            {/* Left side - Guide List */}
-            <div className="w-full lg:w-1/2 h-full overflow-y-auto lg:border-r border-gray-200">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-                {filteredGuides.map((guide) => (
-                  <GuideCardCompact
-                    key={guide._id}
-                    guide={guide}
-                    onSelect={handleGuideSelect}
-                    isSelected={selectedGuide?._id === guide._id}
-                  />
-                ))}
+          <>
+            {/* Mobile View */}
+            <div className="lg:hidden h-full relative">
+              {/* Mobile List View */}
+              <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'list' ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="h-full overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                    {filteredGuides.map((guide) => (
+                      <GuideCardCompact
+                        key={guide._id}
+                        guide={guide}
+                        onSelect={handleGuideSelect}
+                        isSelected={selectedGuide?._id === guide._id}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Mobile Map View */}
+              <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'map' ? 'translate-x-0' : 'translate-x-full'}`}>
+                <GoogleMap 
+                  guides={filteredGuides}
+                  onMarkerClick={handleGuideSelect}
+                  selectedGuide={selectedGuide}
+                />
+              </div>
+              
+              {/* Mobile Toggle Button */}
+              <button
+                onClick={() => setMobileView(mobileView === 'list' ? 'map' : 'list')}
+                className="lg:hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 hover:bg-gray-800 transition-colors z-10"
+              >
+                {mobileView === 'list' ? (
+                  <>
+                    <Map className="w-4 h-4" />
+                    <span>Mapa</span>
+                  </>
+                ) : (
+                  <>
+                    <List className="w-4 h-4" />
+                    <span>Lista</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden lg:flex h-full">
+              {/* Left side - Guide List */}
+              <div className="w-1/2 h-full overflow-y-auto border-r border-gray-200">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                  {filteredGuides.map((guide) => (
+                    <GuideCardCompact
+                      key={guide._id}
+                      guide={guide}
+                      onSelect={handleGuideSelect}
+                      isSelected={selectedGuide?._id === guide._id}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Right side - Map */}
+              <div className="w-1/2 h-full sticky top-0">
+                <GoogleMap 
+                  guides={filteredGuides}
+                  onMarkerClick={handleGuideSelect}
+                  selectedGuide={selectedGuide}
+                />
               </div>
             </div>
-            
-            {/* Right side - Map (hidden on mobile) */}
-            <div className="hidden lg:block lg:w-1/2 h-full sticky top-0">
-              <GoogleMap 
-                guides={filteredGuides}
-                onMarkerClick={handleGuideSelect}
-                selectedGuide={selectedGuide}
-              />
-            </div>
-          </div>
+          </>
         )}
       </main>
 
-      {/* Results count */}
-      <div className="bg-white border-t px-4 py-2">
+      {/* Results count - hidden on mobile when in map view */}
+      <div className={`bg-white border-t px-4 py-2 ${mobileView === 'map' ? 'hidden lg:block' : ''}`}>
         <div className="max-w-7xl mx-auto text-sm text-gray-600">
           {filteredGuides.length} {filteredGuides.length === 1 ? 'resultado' : 'resultados'} encontrado{filteredGuides.length !== 1 ? 's' : ''}
         </div>
