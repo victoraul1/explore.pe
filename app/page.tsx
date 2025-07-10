@@ -194,9 +194,9 @@ export default function Home() {
             <div className="lg:hidden h-full">
               {mobileView === 'list' ? (
                 /* Mobile List View with Inline Map */
-                <div className="h-full overflow-y-auto">
-                  {/* Inline Map - height of one guide card */}
-                  <div className="h-48 sm:h-56 border-b border-gray-200 relative">
+                <div className="h-full overflow-y-auto bg-gray-50">
+                  {/* Inline Map - reduced height */}
+                  <div className="h-32 sm:h-36 relative shadow-md">
                     <GoogleMap 
                       guides={filteredGuides}
                       onMarkerClick={handleGuideSelect}
@@ -212,16 +212,21 @@ export default function Home() {
                     </button>
                   </div>
                   
-                  {/* Guide List */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-                    {filteredGuides.map((guide) => (
-                      <GuideCardCompact
-                        key={guide._id}
-                        guide={guide}
-                        onSelect={handleGuideSelect}
-                        isSelected={selectedGuide?._id === guide._id}
-                      />
-                    ))}
+                  {/* Separator Space */}
+                  <div className="h-8 bg-gray-50"></div>
+                  
+                  {/* Guide List with white background */}
+                  <div className="bg-white rounded-t-2xl shadow-lg min-h-screen">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                      {filteredGuides.map((guide) => (
+                        <GuideCardCompact
+                          key={guide._id}
+                          guide={guide}
+                          onSelect={handleGuideSelect}
+                          isSelected={selectedGuide?._id === guide._id}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : (
