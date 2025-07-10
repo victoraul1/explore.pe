@@ -191,10 +191,28 @@ export default function Home() {
         ) : (
           <>
             {/* Mobile View */}
-            <div className="lg:hidden h-full relative">
-              {/* Mobile List View */}
-              <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'list' ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="lg:hidden h-full">
+              {mobileView === 'list' ? (
+                /* Mobile List View with Inline Map */
                 <div className="h-full overflow-y-auto">
+                  {/* Inline Map - height of one guide card */}
+                  <div className="h-48 sm:h-56 border-b border-gray-200 relative">
+                    <GoogleMap 
+                      guides={filteredGuides}
+                      onMarkerClick={handleGuideSelect}
+                      selectedGuide={selectedGuide}
+                    />
+                    {/* Expand Map Indicator */}
+                    <button
+                      onClick={() => setMobileView('map')}
+                      className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:bg-white transition-colors"
+                    >
+                      <Map className="w-3.5 h-3.5" />
+                      <span>Expandir</span>
+                    </button>
+                  </div>
+                  
+                  {/* Guide List */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
                     {filteredGuides.map((guide) => (
                       <GuideCardCompact
@@ -206,16 +224,16 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
-              </div>
-              
-              {/* Mobile Map View */}
-              <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'map' ? 'translate-x-0' : 'translate-x-full'}`}>
-                <GoogleMap 
-                  guides={filteredGuides}
-                  onMarkerClick={handleGuideSelect}
-                  selectedGuide={selectedGuide}
-                />
-              </div>
+              ) : (
+                /* Full Screen Mobile Map View */
+                <div className="h-full">
+                  <GoogleMap 
+                    guides={filteredGuides}
+                    onMarkerClick={handleGuideSelect}
+                    selectedGuide={selectedGuide}
+                  />
+                </div>
+              )}
               
               {/* Mobile Toggle Button */}
               <button
@@ -225,12 +243,12 @@ export default function Home() {
                 {mobileView === 'list' ? (
                   <>
                     <Map className="w-4 h-4" />
-                    <span>Mapa</span>
+                    <span>Mapa completo</span>
                   </>
                 ) : (
                   <>
                     <List className="w-4 h-4" />
-                    <span>Lista</span>
+                    <span>Ver listado</span>
                   </>
                 )}
               </button>
