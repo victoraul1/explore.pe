@@ -195,37 +195,40 @@ export default function Home() {
               {mobileView === 'list' ? (
                 /* Mobile List View with Inline Map */
                 <div className="h-full flex flex-col">
-                  {/* Fixed height map container */}
-                  <div className="flex-shrink-0" style={{ height: '300px' }}>
-                    <div className="h-full relative shadow-md">
-                      <GoogleMap 
-                        guides={filteredGuides}
-                        onMarkerClick={handleGuideSelect}
-                        selectedGuide={selectedGuide}
-                      />
-                      {/* Expand Map Indicator */}
-                      <button
-                        onClick={() => setMobileView('map')}
-                        className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md flex items-center gap-2 text-sm font-medium text-gray-700 hover:bg-white transition-colors"
-                      >
-                        <Map className="w-4 h-4" />
-                        <span>Expandir mapa</span>
-                      </button>
-                    </div>
+                  {/* Map container - max 40% of viewport height */}
+                  <div className="flex-shrink-0 relative" style={{ height: '40vh', maxHeight: '250px' }}>
+                    <GoogleMap 
+                      guides={filteredGuides}
+                      onMarkerClick={handleGuideSelect}
+                      selectedGuide={selectedGuide}
+                    />
+                    {/* Expand Map Indicator */}
+                    <button
+                      onClick={() => setMobileView('map')}
+                      className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-md flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:bg-white transition-colors"
+                    >
+                      <Map className="w-3.5 h-3.5" />
+                      <span>Expandir</span>
+                    </button>
                   </div>
                   
-                  {/* Guide List - scrollable area below map */}
-                  <div className="flex-1 overflow-y-auto bg-gray-50">
-                    <div className="bg-white">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-                        {filteredGuides.map((guide) => (
-                          <GuideCardCompact
-                            key={guide._id}
-                            guide={guide}
-                            onSelect={handleGuideSelect}
-                            isSelected={selectedGuide?._id === guide._id}
-                          />
-                        ))}
+                  {/* Separator */}
+                  <div className="h-2 bg-gray-100"></div>
+                  
+                  {/* Guide List Panel - takes remaining space */}
+                  <div className="flex-1 bg-gray-50 overflow-hidden">
+                    <div className="h-full overflow-y-auto">
+                      <div className="bg-white m-2 rounded-lg shadow-sm">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                          {filteredGuides.map((guide) => (
+                            <GuideCardCompact
+                              key={guide._id}
+                              guide={guide}
+                              onSelect={handleGuideSelect}
+                              isSelected={selectedGuide?._id === guide._id}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
