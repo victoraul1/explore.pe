@@ -86,15 +86,15 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className={`grid grid-cols-1 ${guide.userType === 'guide' ? 'lg:grid-cols-3' : ''} gap-8`}>
           {/* Main Content */}
           <div className={`${guide.userType === 'guide' ? 'lg:col-span-2' : 'max-w-4xl mx-auto'} space-y-6`}>
             {/* Profile Header */}
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">{guide.name}</h1>
+            <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                <div className="flex-1">
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{guide.name}</h1>
                   <div className="flex items-center gap-2 mt-2 text-gray-800">
                     <MapPin className="w-4 h-4 text-gray-500" />
                     <span>{guide.location}</span>
@@ -108,7 +108,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                   {guide.locations && guide.locations.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {guide.locations.map((loc, index) => (
-                        <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm">
+                        <span key={index} className="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-800">
                           {loc}
                         </span>
                       ))}
@@ -117,7 +117,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                 </div>
                 
                 {/* Share buttons */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-shrink-0">
                   <button
                     onClick={() => handleShare('whatsapp')}
                     className="p-2 bg-green-100 text-green-600 rounded-lg hover:bg-green-200"
@@ -190,7 +190,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
 
             {/* Images */}
             {guide.images && guide.images.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <h2 className="text-xl font-semibold mb-4">Fotos</h2>
                 <ImageCarousel images={guide.images} />
               </div>
@@ -198,7 +198,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
 
             {/* YouTube Video */}
             {guide.youtubeEmbed && (
-              <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <h2 className="text-xl font-semibold mb-4">Video</h2>
                 <div className="aspect-video">
                   <iframe
@@ -219,7 +219,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
           {guide.userType === 'guide' && (
             <div className="space-y-6">
               {/* Map */}
-              <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <h3 className="text-lg font-semibold mb-3">Ubicación</h3>
                 {guide.lat && guide.lng && guide.lat !== 0 && guide.lng !== 0 ? (
                   <div className="aspect-video">
@@ -239,7 +239,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
 
               {/* Social Media */}
               {(guide.instagram || guide.facebook) && (
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
                   <h3 className="text-lg font-semibold mb-3">Redes Sociales</h3>
                   <div className="space-y-2">
                     {guide.instagram && (

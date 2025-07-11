@@ -80,7 +80,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
   }
 
   return (
-    <div className="relative bg-gray-100 rounded-lg p-4">
+    <div className="relative bg-gray-100 rounded-lg p-2 sm:p-4 -mx-2 sm:mx-0">
       {onClose && (
         <button
           onClick={onClose}
