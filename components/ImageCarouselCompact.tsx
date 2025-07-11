@@ -2,22 +2,25 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { IImage } from '@/models/Guide';
+import { normalizeImages, getImageUrl } from '@/lib/imageUtils';
 
 interface ImageCarouselCompactProps {
-  images: string[];
+  images: (string | IImage)[];
 }
 
 export default function ImageCarouselCompact({ images }: ImageCarouselCompactProps) {
+  const normalizedImages = normalizeImages(images);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? normalizedImages.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === normalizedImages.length - 1 ? 0 : prev + 1));
   };
 
   // Handle touch events for mobile swiping
@@ -44,7 +47,7 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
     }
   };
 
-  if (!images || images.length === 0) {
+  if (!normalizedImages || normalizedImages.length === 0) {
     return (
       <div className="w-full h-full bg-gray-200 flex items-center justify-center">
         <span className="text-gray-500">Sin imágenes</span>
@@ -61,7 +64,7 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {images.map((image, index) => (
+        {normalizedImages.map((image, index) => (
           <div
             key={index}
             className={`absolute inset-0 w-full h-full transition-transform duration-300 ease-in-out ${
@@ -73,7 +76,7 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
             }`}
           >
             <img
-              src={image}
+              src={image.url}
               alt={`Imagen ${index + 1}`}
               className="w-full h-full object-cover"
               draggable={false}
@@ -83,7 +86,7 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
       </div>
       
       {/* Navigation buttons - visible on desktop, hidden on mobile */}
-      {images.length > 1 && (
+      {normalizedImages.length > 1 && (
         <>
           <button
             onClick={(e) => {
@@ -107,7 +110,7 @@ export default function ImageCarouselCompact({ images }: ImageCarouselCompactPro
 
           {/* Dots indicator */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-            {images.map((_, index) => (
+            {normalizedImages.map((_, index) => (
               <button
                 key={index}
                 onClick={(e) => {
