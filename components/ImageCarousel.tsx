@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import PhotoModal from './PhotoModal';
 
 interface ImageCarouselProps {
   images: string[];
@@ -13,6 +14,8 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const handlePrevious = () => {
@@ -53,6 +56,13 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
     const walk = (x - startX) * 2;
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  const handleImageClick = (index: number) => {
+    if (!isDragging) {
+      setModalIndex(index);
+      setShowModal(true);
     }
   };
 
@@ -110,12 +120,13 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
             {images.map((image, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-52 h-36"
+                className="flex-shrink-0 w-52 h-36 cursor-pointer"
+                onClick={() => handleImageClick(index)}
               >
                 <img
                   src={image}
                   alt={`Imagen ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-sm"
+                  className="w-full h-full object-cover rounded-lg shadow-sm hover:opacity-90 transition-opacity"
                   draggable={false}
                 />
               </div>
@@ -146,6 +157,15 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
           />
         ))}
       </div>
+      
+      {showModal && (
+        <PhotoModal
+          images={images}
+          initialIndex={modalIndex}
+          onClose={() => setShowModal(false)}
+          canLike={false}
+        />
+      )}
     </div>
   );
 }

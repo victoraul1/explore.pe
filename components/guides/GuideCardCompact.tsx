@@ -76,7 +76,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
                 )}
               </div>
             ) : (
-              <span className="text-sm text-gray-600 line-clamp-1">{guide.location}</span>
+              <span className="text-sm text-gray-800 line-clamp-1">{guide.location}</span>
             )}
           </div>
           
