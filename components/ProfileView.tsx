@@ -171,7 +171,7 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                     {guide.phone && (
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-gray-400" />
-                        <span>{guide.phone}</span>
+                        <span className="text-gray-800">{guide.phone}</span>
                       </div>
                     )}
                     {guide.whatsapp && (
