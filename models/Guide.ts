@@ -1,5 +1,10 @@
 import mongoose, { Schema, model, models } from 'mongoose';
 
+export interface IImage {
+  url: string;
+  caption?: string;
+}
+
 export interface IGuide {
   _id?: string;
   name: string;
@@ -18,7 +23,7 @@ export interface IGuide {
   instagram?: string;
   facebook?: string;
   services?: string;
-  images?: string[];
+  images?: (string | IImage)[];
   lat: number;
   lng: number;
   price?: number;
@@ -54,7 +59,10 @@ const GuideSchema = new Schema<IGuide>({
   instagram: { type: String },
   facebook: { type: String },
   services: { type: String },
-  images: [{ type: String }],
+  images: [{
+    url: { type: String, required: true },
+    caption: { type: String }
+  }],
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   price: { type: Number },

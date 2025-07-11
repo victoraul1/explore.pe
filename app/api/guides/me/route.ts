@@ -51,7 +51,7 @@ export async function PUT(request: Request) {
     await dbConnect();
     
     const body = await request.json();
-    const { name, phone, whatsapp, location, instagram, facebook, services, country, placesVisited } = body;
+    const { name, phone, whatsapp, location, instagram, facebook, services, country, placesVisited, images } = body;
     
     // Get current guide to check if name is changing
     const currentGuide = await Guide.findOne({ email: session.user.email });
@@ -71,6 +71,11 @@ export async function PUT(request: Request) {
       facebook,
       services
     };
+    
+    // Add images if provided
+    if (images !== undefined) {
+      updateData.images = images;
+    }
     
     // Add tourist-specific fields
     if (currentGuide.userType === 'explorer') {

@@ -17,8 +17,11 @@ import {
   AlertCircle,
   Upload,
   X,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Edit2
 } from 'lucide-react';
+import { IImage } from '@/models/Guide';
+import { normalizeImages } from '@/lib/imageUtils';
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
@@ -39,9 +42,11 @@ export default function Dashboard() {
     facebook: '',
     services: '',
   });
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<IImage[]>([]);
   const [uploading, setUploading] = useState(false);
   const [userType, setUserType] = useState<'guide' | 'explorer'>('guide');
+  const [editingCaption, setEditingCaption] = useState<number | null>(null);
+  const [tempCaption, setTempCaption] = useState('');
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -69,7 +74,7 @@ export default function Dashboard() {
           facebook: data.guide.facebook || '',
           services: data.guide.services || '',
         });
-        setImages(data.guide.images || []);
+        setImages(normalizeImages(data.guide.images));
         setUserType(data.guide.userType || 'guide');
       }
     } catch (error) {
@@ -137,7 +142,7 @@ export default function Dashboard() {
       const data = await response.json();
       
       if (response.ok) {
-        setImages(data.images);
+        setImages(normalizeImages(data.images));
         setMessage('Imagen subida exitosamente');
         setTimeout(() => setMessage(''), 3000);
       } else {
@@ -162,7 +167,7 @@ export default function Dashboard() {
       const data = await response.json();
       
       if (response.ok) {
-        setImages(data.images);
+        setImages(normalizeImages(data.images));
         setMessage('Imagen eliminada exitosamente');
         setTimeout(() => setMessage(''), 3000);
       } else {
@@ -172,6 +177,43 @@ export default function Dashboard() {
       console.error('Error:', error);
       setError('Error al eliminar imagen');
     }
+  };
+
+  const handleEditCaption = (index: number) => {
+    setEditingCaption(index);
+    setTempCaption(images[index].caption || '');
+  };
+
+  const handleSaveCaption = async (index: number) => {
+    try {
+      const updatedImages = [...images];
+      updatedImages[index].caption = tempCaption;
+      
+      const response = await fetch('/api/guides/me', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          images: updatedImages,
+        }),
+      });
+
+      if (response.ok) {
+        setImages(updatedImages);
+        setEditingCaption(null);
+        setMessage('Descripción actualizada');
+        setTimeout(() => setMessage(''), 3000);
+      } else {
+        setError('Error al actualizar descripción');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Error al actualizar descripción');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCaption(null);
+    setTempCaption('');
   };
 
   if (loading) {
@@ -472,26 +514,71 @@ export default function Dashboard() {
                 Puedes subir hasta {userType === 'explorer' ? '50' : '20'} imágenes para mostrar {userType === 'explorer' ? 'tus aventuras' : 'tus servicios'}
               </p>
               
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                 {images.map((image, index) => (
-                  <div key={index} className="relative group">
+                  <div key={index} className="relative group bg-white rounded-lg shadow-sm overflow-hidden">
                     <img
-                      src={image}
+                      src={image.url}
                       alt={`Imagen ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
+                      className="w-full h-40 object-cover"
                     />
                     <button
                       type="button"
-                      onClick={() => handleDeleteImage(image)}
+                      onClick={() => handleDeleteImage(image.url)}
                       className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       <X className="w-4 h-4" />
                     </button>
+                    
+                    {/* Caption section */}
+                    <div className="p-3">
+                      {editingCaption === index ? (
+                        <div className="space-y-2">
+                          <textarea
+                            value={tempCaption}
+                            onChange={(e) => setTempCaption(e.target.value)}
+                            className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Describe esta imagen..."
+                            rows={2}
+                            maxLength={200}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={() => handleSaveCaption(index)}
+                              className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                            >
+                              Guardar
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleCancelEdit}
+                              className="px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded hover:bg-gray-400"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-sm text-gray-600 line-clamp-2">
+                            {image.caption || 'Sin descripción'}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => handleEditCaption(index)}
+                            className="text-blue-500 hover:text-blue-600 flex-shrink-0"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
                 
                 {images.length < (userType === 'explorer' ? 50 : 20) && (
-                  <label className="border-2 border-dashed border-gray-300 rounded-lg h-32 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
+                  <label className="border-2 border-dashed border-gray-300 rounded-lg min-h-[200px] flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors">
                     <Upload className="w-8 h-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-600">
                       {uploading ? 'Subiendo...' : 'Subir imagen'}

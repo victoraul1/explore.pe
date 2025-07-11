@@ -3,13 +3,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import PhotoModal from './PhotoModal';
+import { IImage } from '@/models/Guide';
+import { normalizeImages, getImageUrl, getImageCaption } from '@/lib/imageUtils';
 
 interface ImageCarouselProps {
-  images: string[];
+  images: (string | IImage)[];
   onClose?: () => void;
 }
 
 export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
+  const normalizedImages = normalizeImages(images);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -75,7 +78,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
     }
   }, [currentIndex]);
 
-  if (!images || images.length === 0) {
+  if (!normalizedImages || normalizedImages.length === 0) {
     return null;
   }
 
@@ -91,7 +94,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
       )}
       
       <div className="relative">
-        {images.length > 3 && currentIndex > 0 && (
+        {normalizedImages.length > 3 && currentIndex > 0 && (
           <button
             onClick={handlePrevious}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"
@@ -117,24 +120,31 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
           }}
         >
           <div className="flex gap-4 pb-2">
-            {images.map((image, index) => (
+            {normalizedImages.map((image, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-40 sm:w-52 h-28 sm:h-36 cursor-pointer"
+                className="flex-shrink-0 cursor-pointer"
                 onClick={() => handleImageClick(index)}
               >
-                <img
-                  src={image}
-                  alt={`Imagen ${index + 1}`}
-                  className="w-full h-full object-cover rounded-lg shadow-sm hover:opacity-90 transition-opacity"
-                  draggable={false}
-                />
+                <div className="w-40 sm:w-52">
+                  <img
+                    src={image.url}
+                    alt={`Imagen ${index + 1}`}
+                    className="w-full h-28 sm:h-36 object-cover rounded-lg shadow-sm hover:opacity-90 transition-opacity"
+                    draggable={false}
+                  />
+                  {image.caption && (
+                    <p className="mt-1 text-xs text-gray-600 line-clamp-2 px-1">
+                      {image.caption}
+                    </p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {images.length > 3 && currentIndex < images.length - 3 && (
+        {normalizedImages.length > 3 && currentIndex < normalizedImages.length - 3 && (
           <button
             onClick={handleNext}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"
@@ -145,7 +155,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
       </div>
 
       <div className="flex justify-center mt-4 gap-1">
-        {images.map((_, index) => (
+        {normalizedImages.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(Math.floor(index / 3) * 3)}
@@ -160,7 +170,8 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
       
       {showModal && (
         <PhotoModal
-          images={images}
+          images={normalizedImages.map(img => img.url)}
+          captions={normalizedImages.map(img => img.caption || '')}
           initialIndex={modalIndex}
           onClose={() => setShowModal(false)}
           canLike={false}

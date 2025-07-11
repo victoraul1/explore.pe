@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     // Update guide with new image
     const imageUrl = `/uploads/guides/${filename}`;
     guide.images = guide.images || [];
-    guide.images.push(imageUrl);
+    guide.images.push({ url: imageUrl, caption: '' });
     await guide.save();
 
     return NextResponse.json({ 
@@ -132,8 +132,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // Remove image from array
-    guide.images = guide.images?.filter((img: string) => img !== imageUrl) || [];
+    // Remove image from array (handle both string and object formats)
+    guide.images = guide.images?.filter((img: any) => {
+      if (typeof img === 'string') {
+        return img !== imageUrl;
+      }
+      return img.url !== imageUrl;
+    }) || [];
     await guide.save();
 
     // Note: We're not deleting the actual file to avoid issues if it's referenced elsewhere

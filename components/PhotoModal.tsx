@@ -5,6 +5,7 @@ import { X, ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 
 interface PhotoModalProps {
   images: string[];
+  captions?: string[];
   initialIndex: number;
   onClose: () => void;
   onLike?: (index: number) => void;
@@ -14,6 +15,7 @@ interface PhotoModalProps {
 
 export default function PhotoModal({ 
   images, 
+  captions = [],
   initialIndex, 
   onClose, 
   onLike,
@@ -82,11 +84,22 @@ export default function PhotoModal({
 
       {/* Image container */}
       <div className="relative max-w-6xl max-h-[90vh] mx-4">
-        <img
-          src={images[currentIndex]}
-          alt={`Imagen ${currentIndex + 1}`}
-          className="max-w-full max-h-[90vh] object-contain"
-        />
+        <div className="flex flex-col items-center">
+          <img
+            src={images[currentIndex]}
+            alt={`Imagen ${currentIndex + 1}`}
+            className="max-w-full max-h-[80vh] object-contain"
+          />
+          
+          {/* Caption */}
+          {captions[currentIndex] && (
+            <div className="mt-4 max-w-2xl text-center">
+              <p className="text-white text-sm sm:text-base bg-black/50 px-4 py-2 rounded-lg">
+                {captions[currentIndex]}
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Like button */}
         {canLike && (
