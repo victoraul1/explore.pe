@@ -67,7 +67,7 @@ export default function GuideCardCompact({ guide, onSelect, isSelected }: GuideC
             {guide.userType === 'explorer' && guide.locations && guide.locations.length > 0 ? (
               <div className="flex flex-wrap gap-1">
                 {guide.locations.slice(0, 3).map((loc, index) => (
-                  <span key={index} className="text-xs bg-gray-100 px-2 py-0.5 rounded-full">
+                  <span key={index} className="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full">
                     {loc}
                   </span>
                 ))}
