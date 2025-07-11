@@ -59,10 +59,7 @@ const GuideSchema = new Schema<IGuide>({
   instagram: { type: String },
   facebook: { type: String },
   services: { type: String },
-  images: [{
-    url: { type: String, required: true },
-    caption: { type: String }
-  }],
+  images: { type: Schema.Types.Mixed },
   lat: { type: Number, required: true },
   lng: { type: Number, required: true },
   price: { type: Number },
