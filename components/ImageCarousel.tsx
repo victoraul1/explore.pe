@@ -80,7 +80,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
   }
 
   return (
-    <div className="relative bg-gray-100 rounded-lg p-2 sm:p-4 -mx-2 sm:mx-0">
+    <div className="relative bg-gray-100 rounded-lg p-2 sm:p-4">
       {onClose && (
         <button
           onClick={onClose}
@@ -120,7 +120,7 @@ export default function ImageCarousel({ images, onClose }: ImageCarouselProps) {
             {images.map((image, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-52 h-36 cursor-pointer"
+                className="flex-shrink-0 w-40 sm:w-52 h-28 sm:h-36 cursor-pointer"
                 onClick={() => handleImageClick(index)}
               >
                 <img

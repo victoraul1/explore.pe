@@ -86,10 +86,10 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 overflow-x-hidden">
         <div className={`grid grid-cols-1 ${guide.userType === 'guide' ? 'lg:grid-cols-3' : ''} gap-8`}>
           {/* Main Content */}
-          <div className={`${guide.userType === 'guide' ? 'lg:col-span-2' : 'max-w-4xl mx-auto'} space-y-6`}>
+          <div className={`${guide.userType === 'guide' ? 'lg:col-span-2' : 'w-full max-w-4xl mx-auto'} space-y-6`}>
             {/* Profile Header */}
             <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
