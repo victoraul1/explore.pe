@@ -15,6 +15,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showGuides, setShowGuides] = useState(true);
   const [showTourists, setShowTourists] = useState(true);
+  const [showCertifiedOnly, setShowCertifiedOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileView, setMobileView] = useState<'list' | 'map'>('list');
 
@@ -23,7 +24,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    applyFilters(searchQuery, showGuides, showTourists);
+    applyFilters(searchQuery, showGuides, showTourists, showCertifiedOnly);
   }, [guides]);
 
   const fetchGuides = async () => {
@@ -41,10 +42,10 @@ export default function Home() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    applyFilters(query, showGuides, showTourists);
+    applyFilters(query, showGuides, showTourists, showCertifiedOnly);
   };
 
-  const applyFilters = (query: string, showGuidesFilter: boolean, showTouristsFilter: boolean) => {
+  const applyFilters = (query: string, showGuidesFilter: boolean, showTouristsFilter: boolean, showCertifiedFilter: boolean) => {
     let filtered = [...guides];
 
     // Filter by user type
@@ -53,6 +54,18 @@ export default function Home() {
       if (guide.userType === 'explorer' && !showTouristsFilter) return false;
       return true;
     });
+
+    // Filter by certification status (only applies to guides)
+    if (showCertifiedFilter) {
+      filtered = filtered.filter(guide => {
+        // Only filter guides, not tourists/explorers
+        if (guide.userType === 'guide') {
+          return guide.certificateNumber && guide.certificateNumber.trim() !== '';
+        }
+        // Explorers/tourists pass through this filter
+        return true;
+      });
+    }
 
     // Filter by search query
     if (query.trim()) {
@@ -69,13 +82,19 @@ export default function Home() {
   const handleToggleGuides = () => {
     const newShowGuides = !showGuides;
     setShowGuides(newShowGuides);
-    applyFilters(searchQuery, newShowGuides, showTourists);
+    applyFilters(searchQuery, newShowGuides, showTourists, showCertifiedOnly);
   };
 
   const handleToggleTourists = () => {
     const newShowTourists = !showTourists;
     setShowTourists(newShowTourists);
-    applyFilters(searchQuery, showGuides, newShowTourists);
+    applyFilters(searchQuery, showGuides, newShowTourists, showCertifiedOnly);
+  };
+
+  const handleToggleCertified = () => {
+    const newShowCertifiedOnly = !showCertifiedOnly;
+    setShowCertifiedOnly(newShowCertifiedOnly);
+    applyFilters(searchQuery, showGuides, showTourists, newShowCertifiedOnly);
   };
 
   const handleGuideSelect = (guide: IGuide) => {
@@ -172,6 +191,18 @@ export default function Home() {
                 />
                 <span className="ml-2 text-sm font-medium text-gray-700">
                   Mostrar Turistas
+                </span>
+              </label>
+              
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showCertifiedOnly}
+                  onChange={handleToggleCertified}
+                  className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700">
+                  Solo Guías Certificados MINCETUR
                 </span>
               </label>
             </div>
