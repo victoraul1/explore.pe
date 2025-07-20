@@ -202,7 +202,7 @@ export default function Home() {
                   className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500"
                 />
                 <span className="ml-2 text-sm font-medium text-gray-700">
-                  Solo Guías Certificados MINCETUR
+                  Solo Guías con Nro de Certificado
                 </span>
               </label>
             </div>
