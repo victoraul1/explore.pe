@@ -22,7 +22,10 @@ export async function GET(request: Request) {
     const guides = await Guide.find(query)
       .where('active').equals(true)
       .where('role').ne('admin')
-      .where('email').ne('info@explore.pe'); // Also exclude by email to be sure
+      .where('email').ne('info@explore.pe') // Also exclude by email to be sure
+      .where('images').exists(true)
+      .where('images').ne([])
+      .where('images.0').exists(true); // Ensure at least one image exists
     
     return NextResponse.json({ guides });
   } catch (error) {
