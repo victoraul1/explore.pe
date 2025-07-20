@@ -221,22 +221,29 @@ export default function Home() {
                   
                   {/* Mobile Map Bottom Sheet - Shows selected guide */}
                   {selectedGuide && (
-                    <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-out">
-                      <div className="p-4 pb-20"> {/* Extra padding bottom for toggle button */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto"></div>
-                          <button
-                            onClick={() => setSelectedGuide(null)}
-                            className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
-                          >
-                            <X className="w-5 h-5 text-gray-500" />
-                          </button>
+                    <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-out" style={{ maxHeight: '60vh' }}>
+                      <div className="relative h-full flex flex-col">
+                        {/* Header with drag handle and close button */}
+                        <div className="flex-shrink-0 p-4 pb-2">
+                          <div className="flex items-center justify-between">
+                            <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto"></div>
+                            <button
+                              onClick={() => setSelectedGuide(null)}
+                              className="absolute right-4 top-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                            >
+                              <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                          </div>
                         </div>
-                        <GuideCardCompact
-                          guide={selectedGuide}
-                          onSelect={handleGuideSelect}
-                          isSelected={true}
-                        />
+                        
+                        {/* Scrollable content */}
+                        <div className="flex-1 overflow-y-auto px-4 pb-20"> {/* Extra padding bottom for toggle button */}
+                          <GuideCardCompact
+                            guide={selectedGuide}
+                            onSelect={handleGuideSelect}
+                            isSelected={true}
+                          />
+                        </div>
                       </div>
                     </div>
                   )}
