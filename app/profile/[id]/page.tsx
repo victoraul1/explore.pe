@@ -65,11 +65,11 @@ export default async function ProfilePage({ params }: Props) {
   }
 
   // Geocode places visited for tourists
-  let visitedLocations = [];
+  let visitedLocations: Array<{ name: string; lat: number; lng: number; }> = [];
   if (guide.userType === 'explorer' && guide.placesVisited && guide.placesVisited.length > 0) {
     const client = new Client({});
     
-    visitedLocations = await Promise.all(
+    const geocodedLocations = await Promise.all(
       guide.placesVisited.map(async (place: string) => {
         try {
           const response = await client.geocode({
@@ -95,7 +95,7 @@ export default async function ProfilePage({ params }: Props) {
     );
     
     // Filter out failed geocoding attempts
-    visitedLocations = visitedLocations.filter(loc => loc !== null);
+    visitedLocations = geocodedLocations.filter((loc): loc is { name: string; lat: number; lng: number; } => loc !== null);
   }
 
   return (
