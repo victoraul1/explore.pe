@@ -7,6 +7,7 @@ import { MapPin, Phone, MessageCircle, Instagram, Facebook, Share2, Globe, Camer
 import ImageCarousel from '@/components/ImageCarousel';
 import RatingForm from '@/components/RatingForm';
 import SimpleMap from '@/components/SimpleMap';
+import MultiLocationMap from '@/components/maps/MultiLocationMap';
 import { useSession } from 'next-auth/react';
 import Script from 'next/script';
 
@@ -14,9 +15,10 @@ interface ProfileViewProps {
   guide: IGuide;
   reviews: IReview[];
   averageRating: number;
+  visitedLocations?: Array<{ name: string; lat: number; lng: number; }>;
 }
 
-export default function ProfileView({ guide, reviews, averageRating }: ProfileViewProps) {
+export default function ProfileView({ guide, reviews, averageRating, visitedLocations }: ProfileViewProps) {
   const { data: session } = useSession();
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [currentReviews, setCurrentReviews] = useState(reviews);
@@ -209,6 +211,30 @@ export default function ProfileView({ guide, reviews, averageRating }: ProfileVi
                     allowFullScreen
                   />
                 </div>
+              </div>
+            )}
+
+            {/* Visited Places - Only for tourists */}
+            {guide.userType === 'explorer' && guide.placesVisited && guide.placesVisited.length > 0 && (
+              <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                <h2 className="text-xl font-semibold mb-4">Lugares Visitados en Perú</h2>
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600">
+                    {guide.placesVisited.length} {guide.placesVisited.length === 1 ? 'lugar visitado' : 'lugares visitados'}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {guide.placesVisited.map((place, index) => (
+                      <span key={index} className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm">
+                        {place}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                {visitedLocations && visitedLocations.length > 0 && (
+                  <div className="aspect-video">
+                    <MultiLocationMap locations={visitedLocations} />
+                  </div>
+                )}
               </div>
             )}
 

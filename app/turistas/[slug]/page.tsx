@@ -3,6 +3,7 @@ import ProfileView from '@/components/ProfileView';
 import dbConnect from '@/lib/mongodb';
 import Guide, { IGuide } from '@/models/Guide';
 import Review from '@/models/Review';
+import { Client } from '@googlemaps/google-maps-services-js';
 
 interface PageProps {
   params: Promise<{
@@ -37,6 +38,40 @@ export default async function TouristPage({ params }: PageProps) {
     ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
     : 0;
 
+  // Geocode places visited
+  let visitedLocations = [];
+  if (tourist.placesVisited && tourist.placesVisited.length > 0) {
+    const client = new Client({});
+    
+    visitedLocations = await Promise.all(
+      tourist.placesVisited.map(async (place) => {
+        try {
+          const response = await client.geocode({
+            params: {
+              address: `${place}, Peru`,
+              key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+            },
+          });
+          
+          if (response.data.results.length > 0) {
+            const location = response.data.results[0].geometry.location;
+            return {
+              name: place,
+              lat: location.lat,
+              lng: location.lng,
+            };
+          }
+        } catch (error) {
+          console.error(`Error geocoding ${place}:`, error);
+        }
+        return null;
+      })
+    );
+    
+    // Filter out failed geocoding attempts
+    visitedLocations = visitedLocations.filter(loc => loc !== null);
+  }
+
   // Convert MongoDB documents to plain objects
   const touristData = JSON.parse(JSON.stringify(tourist));
   const reviewsData = JSON.parse(JSON.stringify(reviews));
@@ -45,7 +80,8 @@ export default async function TouristPage({ params }: PageProps) {
     <ProfileView 
       guide={touristData} 
       reviews={reviewsData} 
-      averageRating={averageRating} 
+      averageRating={averageRating}
+      visitedLocations={visitedLocations}
     />
   );
 }

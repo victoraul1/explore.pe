@@ -4,6 +4,7 @@ import Guide from '@/models/Guide';
 import Review from '@/models/Review';
 import ProfileView from '@/components/ProfileView';
 import type { Metadata } from 'next';
+import { Client } from '@googlemaps/google-maps-services-js';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -63,11 +64,46 @@ export default async function ProfilePage({ params }: Props) {
     }
   }
 
+  // Geocode places visited for tourists
+  let visitedLocations = [];
+  if (guide.userType === 'explorer' && guide.placesVisited && guide.placesVisited.length > 0) {
+    const client = new Client({});
+    
+    visitedLocations = await Promise.all(
+      guide.placesVisited.map(async (place: string) => {
+        try {
+          const response = await client.geocode({
+            params: {
+              address: `${place}, Peru`,
+              key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+            },
+          });
+          
+          if (response.data.results.length > 0) {
+            const location = response.data.results[0].geometry.location;
+            return {
+              name: place,
+              lat: location.lat,
+              lng: location.lng,
+            };
+          }
+        } catch (error) {
+          console.error(`Error geocoding ${place}:`, error);
+        }
+        return null;
+      })
+    );
+    
+    // Filter out failed geocoding attempts
+    visitedLocations = visitedLocations.filter(loc => loc !== null);
+  }
+
   return (
     <ProfileView 
       guide={JSON.parse(JSON.stringify(guide))}
       reviews={JSON.parse(JSON.stringify(reviews))}
       averageRating={averageRating}
+      visitedLocations={visitedLocations}
     />
   );
 }
