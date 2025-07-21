@@ -41,6 +41,7 @@ export default function Dashboard() {
     instagram: '',
     facebook: '',
     services: '',
+    placesVisited: [] as string[],
   });
   const [images, setImages] = useState<IImage[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -73,6 +74,7 @@ export default function Dashboard() {
           instagram: data.guide.instagram || '',
           facebook: data.guide.facebook || '',
           services: data.guide.services || '',
+          placesVisited: data.guide.placesVisited || [],
         });
         setImages(normalizeImages(data.guide.images));
         setUserType(data.guide.userType || 'guide');
@@ -97,6 +99,7 @@ export default function Dashboard() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          placesVisited: formData.placesVisited.filter(place => place.trim() !== ''),
         }),
       });
 
@@ -118,6 +121,30 @@ export default function Dashboard() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddPlace = () => {
+    setFormData({
+      ...formData,
+      placesVisited: [...formData.placesVisited, ''],
+    });
+  };
+
+  const handlePlaceChange = (index: number, value: string) => {
+    const updatedPlaces = [...formData.placesVisited];
+    updatedPlaces[index] = value;
+    setFormData({
+      ...formData,
+      placesVisited: updatedPlaces,
+    });
+  };
+
+  const handleRemovePlace = (index: number) => {
+    const updatedPlaces = formData.placesVisited.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      placesVisited: updatedPlaces,
     });
   };
 
@@ -442,6 +469,44 @@ export default function Dashboard() {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Ej: Estados Unidos, Brasil, Argentina"
                       />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <MapPin className="inline w-4 h-4 mr-1" />
+                        Lugares visitados en Perú
+                      </label>
+                      <div className="space-y-2">
+                        {formData.placesVisited.map((place, index) => (
+                          <div key={index} className="flex gap-2">
+                            <input
+                              type="text"
+                              value={place}
+                              onChange={(e) => handlePlaceChange(index, e.target.value)}
+                              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                              placeholder="Ej: Machu Picchu, Cusco, Arequipa"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemovePlace(index)}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={handleAddPlace}
+                          className="flex items-center gap-2 px-4 py-2 text-purple-600 border border-purple-300 rounded-lg hover:bg-purple-50"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          Agregar lugar visitado
+                        </button>
+                      </div>
+                      <p className="mt-2 text-sm text-gray-500">
+                        Ingresa los lugares que has visitado en Perú. Estos aparecerán en un mapa en tu perfil.
+                      </p>
                     </div>
 
                     <div>
